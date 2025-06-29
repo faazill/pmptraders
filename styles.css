@@ -2202,6 +2202,98 @@ html, body {
     .quality-showcase {
         display: none;
     }
+    
+    /* Product Section Responsive */
+    .product-card {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .product-gallery {
+        position: static;
+        top: auto;
+        height: auto;
+    }
+    
+    .main-image {
+        height: 180px;
+    }
+    
+    .product-content {
+        padding: 1rem 0.75rem;
+        gap: 1rem;
+    }
+    
+    .product-content h3 {
+        font-size: 1.1rem;
+    }
+    
+    .product-rating {
+        gap: 0.3rem;
+        font-size: 0.85rem;
+    }
+    
+    .product-price {
+        gap: 0.5rem;
+    }
+    
+    .current-price {
+        font-size: 1.2rem;
+    }
+    
+    .original-price {
+        font-size: 0.9rem;
+    }
+    
+    .product-actions {
+        margin-top: 1rem;
+        gap: 0.5rem;
+    }
+    
+    .product-actions .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .features-grid,
+    .specs-grid,
+    .payment-methods {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .product-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .btn-large {
+        width: 100%;
+    }
+    
+    .thumbnail-gallery {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .tab-buttons {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        text-align: left;
+    }
+    
+    .specs-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .warranty-info {
+        grid-template-columns: 1fr;
+    }
 }
 
 @media (max-width: 480px) {
