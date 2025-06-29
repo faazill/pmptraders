@@ -594,4 +594,53 @@ function handleSwipe() {
             changeSlide(-1);
         }
     }
+}
+
+// Share Product Functionality
+function shareProduct() {
+    const productName = 'AQUA Water Purifier';
+    const productUrl = window.location.href;
+    const shareText = `Check out this amazing ${productName} from PMP Traders! ${productUrl}`;
+    
+    // Check if Web Share API is available
+    if (navigator.share) {
+        navigator.share({
+            title: productName,
+            text: `Check out this amazing ${productName} from PMP Traders!`,
+            url: productUrl
+        }).then(() => {
+            showNotification('Product shared successfully!', 'success');
+        }).catch((error) => {
+            console.log('Error sharing:', error);
+            fallbackShare(shareText);
+        });
+    } else {
+        fallbackShare(shareText);
+    }
+}
+
+// Fallback sharing method
+function fallbackShare(shareText) {
+    // Try to copy to clipboard
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText).then(() => {
+            showNotification('Product link copied to clipboard!', 'success');
+        }).catch(() => {
+            // If clipboard fails, show the text in an alert
+            alert('Share this link: ' + shareText);
+        });
+    } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = shareText;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showNotification('Product link copied to clipboard!', 'success');
+        } catch (err) {
+            alert('Share this link: ' + shareText);
+        }
+        document.body.removeChild(textArea);
+    }
 } 
