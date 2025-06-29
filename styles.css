@@ -1033,6 +1033,7 @@ html, body {
 .features {
     padding: 80px 0;
     background-color: #f8f9fa;
+    overflow: visible;
 }
 
 .features-grid {
@@ -1048,6 +1049,7 @@ html, body {
     text-align: center;
     border: 1px solid #e8eaed;
     transition: all 0.3s ease;
+    overflow: visible;
 }
 
 .feature-card:hover {
@@ -1090,7 +1092,7 @@ html, body {
     padding: 100px 0;
     background: linear-gradient(135deg, #f8f9fa 0%, #e8f0fe 50%, #f1f3f4 100%);
     position: relative;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .about::before {
@@ -1112,10 +1114,12 @@ html, body {
     align-items: center;
     position: relative;
     z-index: 2;
+    overflow: visible;
 }
 
 .about-text {
     position: relative;
+    overflow: visible;
 }
 
 .about-text::before {
@@ -1190,6 +1194,7 @@ html, body {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
     position: relative;
+    overflow: visible;
 }
 
 .stat {
@@ -1199,7 +1204,7 @@ html, body {
     backdrop-filter: blur(20px);
     border-radius: 24px;
     position: relative;
-    overflow: hidden;
+    overflow: visible;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
 }
