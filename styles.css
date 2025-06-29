@@ -1756,6 +1756,70 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .nav-container {
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+    
+    .slide-content .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .text-only-slide {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .products .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .features .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .about .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .contact .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .footer .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    .product-detail .container {
+        max-width: 100%;
+        padding: 0 1rem;
+        margin: 0;
+    }
+    
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
     .hamburger {
         display: flex;
     }
@@ -1975,6 +2039,70 @@ body {
 }
 
 @media (max-width: 480px) {
+    .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .nav-container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+    
+    .slide-content .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .text-only-slide {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .products .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .features .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .about .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .contact .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .footer .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    .product-detail .container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+        margin: 0;
+    }
+    
+    body {
+        overflow-x: hidden;
+        width: 100%;
+    }
+
     .slide-title {
         font-size: 2rem;
     }
