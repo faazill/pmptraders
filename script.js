@@ -69,21 +69,31 @@ function buyNow() {
 
 // Get Quote Functionality
 function getQuote() {
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const productName = 'AQUA 2090 RO+UV+TDS+Alkaline Water Purifier';
-    
-    showNotification('Quote request sent! We\'ll contact you within 24 hours.', 'success');
-    
-    // Scroll to contact form
-    setTimeout(() => {
-        const contactSection = document.querySelector('#contact');
-        if (contactSection) {
-            contactSection.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    }, 1000);
+    // Open the wholesaler quote modal
+    document.getElementById('quoteModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeQuoteModal() {
+    document.getElementById('quoteModal').style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+// Close modal when clicking outside the modal-content
+window.addEventListener('click', function(e) {
+    const modal = document.getElementById('quoteModal');
+    if (modal && e.target === modal) {
+        closeQuoteModal();
+    }
+});
+
+// Handle wholesaler quote form submission
+function submitWholesalerQuote(event) {
+    event.preventDefault();
+    // You can add AJAX/email logic here. For now, just show a notification.
+    showNotification('Thank you! Your wholesaler quote request has been submitted.', 'success');
+    closeQuoteModal();
+    document.getElementById('wholesalerQuoteForm').reset();
 }
 
 // Mobile Navigation Toggle
@@ -986,4 +996,17 @@ document.addEventListener('DOMContentLoaded', () => {
     statElements.forEach(stat => {
         statsObserver.observe(stat);
     });
-}); 
+});
+
+// WhatsApp Functionality
+function openWhatsApp() {
+    const phoneNumber = '919946170056';
+    const message = 'Hi! I\'m interested in your water purifier products. Can you please provide more information?';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    
+    // Open WhatsApp in new tab
+    window.open(whatsappUrl, '_blank');
+    
+    // Show notification
+    showNotification('Opening WhatsApp...', 'info');
+} 
