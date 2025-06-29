@@ -128,32 +128,134 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Contact form handling
-const contactForm = document.querySelector('.contact-form');
-if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(this);
-        const name = this.querySelector('input[type="text"]').value;
-        const email = this.querySelector('input[type="email"]').value;
-        const message = this.querySelector('textarea').value;
-        
-        // Simple validation
-        if (!name || !email || !message) {
-            showNotification('Please fill in all fields', 'error');
-            return;
+// Initialize EmailJS (only if properly configured)
+(function() {
+    try {
+        if (typeof emailjs !== 'undefined' && "YOUR_PUBLIC_KEY" !== "YOUR_PUBLIC_KEY") {
+            emailjs.init("YOUR_PUBLIC_KEY");
+            console.log('EmailJS initialized successfully');
+        } else {
+            console.log('EmailJS not configured - using Formspree fallback');
         }
+    } catch (error) {
+        console.log('EmailJS initialization failed - using Formspree fallback');
+    }
+})();
+
+// Contact Form Submission with direct email service
+function submitForm(event) {
+    event.preventDefault();
+    
+    const form = document.getElementById('contactForm');
+    const formData = new FormData(form);
+    
+    // Get form values
+    const name = formData.get('name');
+    const email = formData.get('email');
+    const subject = formData.get('subject');
+    const message = formData.get('message');
+    
+    // Validate form
+    if (!name || !email || !subject || !message) {
+        showNotification('Please fill in all required fields.', 'error');
+        return;
+    }
+    
+    // Show loading state
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    submitBtn.disabled = true;
+    
+    // Method 1: Try EmailJS (if properly configured)
+    if (typeof emailjs !== 'undefined' && emailjs.init && "YOUR_PUBLIC_KEY" !== "YOUR_PUBLIC_KEY") {
+        const templateParams = {
+            to_email: 'taskaelite@gmail.com',
+            from_name: name,
+            from_email: email,
+            subject: subject,
+            message: message,
+            reply_to: email
+        };
         
-        if (!isValidEmail(email)) {
-            showNotification('Please enter a valid email address', 'error');
-            return;
+        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                showNotification('Thank you! Your message has been sent successfully.', 'success');
+                form.reset();
+            }, function(error) {
+                console.log('FAILED...', error);
+                // Fallback to Formspree
+                sendViaFormspree(formData, submitBtn, originalText);
+            })
+            .finally(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            });
+    } else {
+        // Method 2: Use Formspree (free service)
+        sendViaFormspree(formData, submitBtn, originalText);
+    }
+}
+
+// Fallback email service using Formspree
+function sendViaFormspree(formData, submitBtn, originalText) {
+    // Create a temporary form for Formspree
+    const tempForm = document.createElement('form');
+    tempForm.method = 'POST';
+    tempForm.action = 'https://formspree.io/f/YOUR_FORMSPREE_ID'; // You'll need to replace this
+    tempForm.style.display = 'none';
+    
+    // Add form data
+    formData.forEach((value, key) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = value;
+        tempForm.appendChild(input);
+    });
+    
+    // Add recipient email
+    const recipientInput = document.createElement('input');
+    recipientInput.type = 'hidden';
+    recipientInput.name = '_replyto';
+    recipientInput.value = 'taskaelite@gmail.com';
+    tempForm.appendChild(recipientInput);
+    
+    // Add subject
+    const subjectInput = document.createElement('input');
+    subjectInput.type = 'hidden';
+    subjectInput.name = '_subject';
+    subjectInput.value = `New Contact Form Submission: ${formData.get('subject')}`;
+    tempForm.appendChild(subjectInput);
+    
+    // Submit the form
+    document.body.appendChild(tempForm);
+    
+    fetch(tempForm.action, {
+        method: 'POST',
+        body: new FormData(tempForm),
+        headers: {
+            'Accept': 'application/json'
         }
-        
-        // Simulate form submission
-        showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
-        this.reset();
+    })
+    .then(response => {
+        if (response.ok) {
+            showNotification('Thank you! Your message has been sent successfully.', 'success');
+            document.getElementById('contactForm').reset();
+        } else {
+            throw new Error('Network response was not ok');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Clean up
+        document.body.removeChild(tempForm);
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
     });
 }
 
@@ -642,5 +744,68 @@ function fallbackShare(shareText) {
             alert('Share this link: ' + shareText);
         }
         document.body.removeChild(textArea);
+    }
+}
+
+// Enhanced notification system
+function showNotification(message, type = 'info') {
+    // Remove existing notifications
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => notification.remove());
+    
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+        <div class="notification-content">
+            <i class="fas ${getNotificationIcon(type)}"></i>
+            <span>${message}</span>
+            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${getNotificationColor(type)};
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10000;
+        max-width: 400px;
+        animation: slideInRight 0.3s ease;
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Auto remove after 5 seconds
+    setTimeout(() => {
+        if (notification.parentElement) {
+            notification.remove();
+        }
+    }, 5000);
+}
+
+function getNotificationIcon(type) {
+    switch (type) {
+        case 'success': return 'fa-check-circle';
+        case 'error': return 'fa-exclamation-circle';
+        case 'warning': return 'fa-exclamation-triangle';
+        default: return 'fa-info-circle';
+    }
+}
+
+function getNotificationColor(type) {
+    switch (type) {
+        case 'success': return '#34a853';
+        case 'error': return '#ea4335';
+        case 'warning': return '#fbbc04';
+        default: return '#1a73e8';
     }
 } 
