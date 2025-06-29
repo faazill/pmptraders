@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PMP Traders - Professional Product Solutions</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>PMP Traders</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Slideshow Section -->
+    <section id="home" class="hero-slideshow">
+        <div class="slideshow-container">
+            <!-- Slide 1: Water Purifier -->
+            <div class="slide active">
+                <div class="slide-background" style="background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')">
+                    <div class="slide-overlay"></div>
+                </div>
+                <div class="slide-content">
+                    <div class="container">
+                        <div class="slide-text">
+                            <h1 class="slide-title">AQUA Water Purifier</h1>
+                            <p class="slide-subtitle">Advanced purification technology for the purest drinking water. Multi-stage filtration with smart monitoring.</p>
+                            <div class="slide-buttons">
+                                <button class="btn btn-primary">Learn More</button>
+                                <button class="btn btn-secondary">Get Quote</button>
+                            </div>
+                        </div>
+                        <div class="slide-image">
+                            <img src="assets/waterpurifier.png" alt="Benchmark Water Purifier" class="product-showcase">
+                            <div class="product-badge">
+                                <span class="badge-text">New</span>
+                                <span class="badge-label">Featured</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: Professional Services -->
+            <div class="slide">
+                <div class="slide-background" style="background-image: url('https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2074&q=80')">
+                    <div class="slide-overlay"></div>
+                </div>
+                <div class="slide-content">
+                    <div class="container text-only-slide">
+                        <div class="slide-text">
+                            <h1 class="slide-title">Professional Product Solutions</h1>
+                            <p class="slide-subtitle">Delivering quality products and exceptional service to meet your business needs with 24/7 support.</p>
+                            <div class="slide-buttons">
+                                <button class="btn btn-primary">Explore Products</button>
+                                <button class="btn btn-secondary">Contact Us</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Quality Assurance -->
+            <div class="slide">
+                <div class="slide-background" style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80')">
+                    <div class="slide-overlay"></div>
+                </div>
+                <div class="slide-content">
+                    <div class="container text-only-slide">
+                        <div class="slide-text">
+                            <h1 class="slide-title">Quality Assured Products</h1>
+                            <p class="slide-subtitle">Premium products that meet the highest standards of quality and reliability. Trusted by 500+ clients.</p>
+                            <div class="slide-buttons">
+                                <button class="btn btn-primary">View Catalog</button>
+                                <button class="btn btn-secondary">Learn More</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slideshow Navigation -->
+        <div class="slideshow-nav">
+            <button class="nav-btn prev" onclick="changeSlide(-1)">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn next" onclick="changeSlide(1)">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+
+        <!-- Slide Indicators -->
+        <div class="slide-indicators">
+            <span class="indicator active" onclick="currentSlide(1)"></span>
+            <span class="indicator" onclick="currentSlide(2)"></span>
+            <span class="indicator" onclick="currentSlide(3)"></span>
+        </div>
+
+        <!-- Promotional Banner -->
+        <div class="promo-banner">
+            <div class="container">
+                <div class="promo-content">
+                    <div class="promo-item">
+                        <i class="fas fa-shipping-fast"></i>
+                        <span>Free Shipping on Orders Over $500</span>
+                    </div>
+                    <div class="promo-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>2-Year Warranty on All Products</span>
+                    </div>
+                    <div class="promo-item">
+                        <i class="fas fa-clock"></i>
+                        <span>24/7 Customer Support</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Featured Products</h2>
+                <p>Discover our premium selection of quality products</p>
+            </div>
+            <div class="products-grid">
+                <div class="product-card featured">
+                    <div class="product-image">
+                        <img src="assets/waterpurifier.webp" alt="AQUA Water Purifier">
+                        <div class="product-badges">
+                            <span class="badge new">New</span>
+                            <span class="badge featured">Featured</span>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h3>AQUA Water Purifier</h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <span class="rating-text">4.8 (127 reviews)</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹4,999</span>
+                            <span class="original-price">₹6,999</span>
+                            <span class="discount">28% OFF</span>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="goToProductPage()">
+                                <i class="fas fa-eye"></i>
+                                View Details
+                            </button>
+                            <button class="btn btn-secondary" onclick="buyNow()">
+                                <i class="fas fa-bolt"></i>
+                                Buy Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Fast Delivery</h3>
+                    <p>Quick and reliable shipping to get your products when you need them.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <h3>Quality Assured</h3>
+                    <p>Premium products that meet the highest standards of quality and reliability.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>24/7 Support</h3>
+                    <p>Round-the-clock customer support to assist you with any questions or concerns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>About PMP Traders</h2>
+                    <p>We are a leading product trading company committed to delivering excellence in every transaction. With years of experience in the industry, we understand the importance of quality, reliability, and customer satisfaction.</p>
+                    <p>Our mission is to provide businesses with the products they need to succeed, backed by exceptional service and competitive pricing.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat">
+                        <h3>500+</h3>
+                        <p>Happy Clients</p>
+                    </div>
+                    <div class="stat">
+                        <h3>1000+</h3>
+                        <p>Products Delivered</p>
+                    </div>
+                    <div class="stat">
+                        <h3>5+</h3>
+                        <p>Years Experience</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2>Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>info@pmptraders.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <p>+1 (555) 123-4567</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>123 Business Street, City, State 12345</p>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>PMP Traders</h3>
+                    <p>Professional product solutions for your business needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PMP Traders. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
