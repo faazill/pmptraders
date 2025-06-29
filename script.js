@@ -501,38 +501,67 @@ document.querySelectorAll('.slide-buttons .btn').forEach(button => {
     });
 });
 
-// Counter animation for stats
+// Counter animation for stats - Chrome compatible
 function animateCounter(element, target, duration = 2000) {
+    if (!element || target <= 0) return;
+    
     let start = 0;
     const increment = target / (duration / 16);
+    let animationId;
     
     function updateCounter() {
         start += increment;
         if (start < target) {
             element.textContent = Math.floor(start) + '+';
-            requestAnimationFrame(updateCounter);
+            animationId = requestAnimationFrame(updateCounter);
         } else {
             element.textContent = target + '+';
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
         }
     }
     
-    updateCounter();
+    // Start the animation
+    animationId = requestAnimationFrame(updateCounter);
+    
+    // Cleanup function
+    return () => {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+    };
 }
 
-// Trigger counter animation when stats come into view
+// Trigger counter animation when stats come into view - Improved for Chrome
 const statsObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             const statNumber = entry.target.querySelector('h3');
-            const target = parseInt(statNumber.textContent);
-            animateCounter(statNumber, target);
+            if (statNumber && !statNumber.dataset.animated) {
+                const target = parseInt(statNumber.textContent.replace(/\D/g, ''));
+                if (target > 0) {
+                    statNumber.dataset.animated = 'true';
+                    statNumber.textContent = '0+';
+                    setTimeout(() => {
+                        animateCounter(statNumber, target);
+                    }, 100);
+                }
+            }
             statsObserver.unobserve(entry.target);
         }
     });
-}, { threshold: 0.5 });
+}, { 
+    threshold: 0.5,
+    rootMargin: '0px 0px -50px 0px'
+});
 
-document.querySelectorAll('.stat').forEach(stat => {
-    statsObserver.observe(stat);
+// Observe stats elements
+document.addEventListener('DOMContentLoaded', () => {
+    const statElements = document.querySelectorAll('.stat');
+    statElements.forEach(stat => {
+        statsObserver.observe(stat);
+    });
 });
 
 // Add floating animation to badges
