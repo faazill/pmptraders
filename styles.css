@@ -52,7 +52,15 @@ html, body {
 }
 
 .nav-logo a {
-    text-decoration: none;
+    text-decoration: none !important;
+    color: inherit;
+    display: block;
+}
+
+.nav-logo a:hover,
+.nav-logo a:focus,
+.nav-logo a:visited {
+    text-decoration: none !important;
     color: inherit;
 }
 
@@ -2441,6 +2449,18 @@ html, body {
     .nav-logo h2 {
         font-size: 1.25rem;
         padding: 6px 12px;
+    }
+
+    .nav-logo a {
+        text-decoration: none !important;
+        color: inherit;
+    }
+    
+    .nav-logo a:hover,
+    .nav-logo a:focus,
+    .nav-logo a:visited {
+        text-decoration: none !important;
+        color: inherit;
     }
 
     .hero-slideshow {
