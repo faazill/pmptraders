@@ -592,6 +592,47 @@ html, body {
     transform: translateY(-1px);
 }
 
+/* Get Quote Button Specific Styling */
+.btn-secondary.btn-large {
+    background: linear-gradient(135deg, #34a853, #0f9d58);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 15px rgba(52, 168, 83, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-secondary.btn-large::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-secondary.btn-large:hover::before {
+    left: 100%;
+}
+
+.btn-secondary.btn-large:hover {
+    background: linear-gradient(135deg, #0f9d58, #0b8043);
+    box-shadow: 0 6px 20px rgba(52, 168, 83, 0.4);
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.btn-secondary.btn-large .fa-envelope {
+    transition: transform 0.3s ease;
+    margin-right: 0.25rem;
+}
+
+.btn-secondary.btn-large:hover .fa-envelope {
+    transform: translateX(3px);
+}
+
 /* Animations */
 @keyframes slideInLeft {
     from {
@@ -2205,21 +2246,23 @@ html, body {
 
 /* Product Images Grid */
 .product-images-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
 }
 
 .grid-image {
-    width: 100%;
-    height: 120px;
-    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    border-radius: 6px;
     overflow: hidden;
     cursor: pointer;
     border: 2px solid transparent;
     transition: all 0.3s ease;
     background: #f8f9fa;
+    flex-shrink: 0;
 }
 
 .grid-image:hover {
@@ -2247,25 +2290,25 @@ html, body {
 /* Responsive Product Images Grid */
 @media (max-width: 768px) {
     .product-images-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 0.75rem;
-        margin-top: 1rem;
+        gap: 0.4rem;
+        margin-top: 0.75rem;
     }
     
     .grid-image {
-        height: 100px;
+        width: 50px;
+        height: 50px;
     }
 }
 
 @media (max-width: 480px) {
     .product-images-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-        margin-top: 0.75rem;
+        gap: 0.3rem;
+        margin-top: 0.5rem;
     }
     
     .grid-image {
-        height: 80px;
+        width: 45px;
+        height: 45px;
     }
 }
 

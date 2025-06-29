@@ -67,6 +67,25 @@ function buyNow() {
     }, 1500);
 }
 
+// Get Quote Functionality
+function getQuote() {
+    const quantity = parseInt(document.getElementById('quantity').value);
+    const productName = 'AQUA 2090 RO+UV+TDS+Alkaline Water Purifier';
+    
+    showNotification('Quote request sent! We\'ll contact you within 24 hours.', 'success');
+    
+    // Scroll to contact form
+    setTimeout(() => {
+        const contactSection = document.querySelector('#contact');
+        if (contactSection) {
+            contactSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    }, 1000);
+}
+
 // Mobile Navigation Toggle
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.querySelector('.nav-menu');
