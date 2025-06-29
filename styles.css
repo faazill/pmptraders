@@ -1872,7 +1872,9 @@ body {
     }
 
     .product-gallery {
-        padding: 1rem;
+        position: static;
+        top: auto;
+        height: auto;
     }
 
     .main-image {
@@ -2079,5 +2081,11 @@ body {
     .product-actions .btn {
         padding: 0.5rem 0.7rem;
         font-size: 0.8rem;
+    }
+
+    .product-gallery {
+        position: static;
+        top: auto;
+        height: auto;
     }
 } 
