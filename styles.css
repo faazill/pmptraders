@@ -2203,6 +2203,72 @@ html, body {
     font-weight: 500;
 }
 
+/* Product Images Grid */
+.product-images-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.grid-image {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.grid-image:hover {
+    border-color: #1a73e8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.2);
+}
+
+.grid-image.active {
+    border-color: #1a73e8;
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+}
+
+.grid-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.grid-image:hover img {
+    transform: scale(1.05);
+}
+
+/* Responsive Product Images Grid */
+@media (max-width: 768px) {
+    .product-images-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+        margin-top: 1rem;
+    }
+    
+    .grid-image {
+        height: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .product-images-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        margin-top: 0.75rem;
+    }
+    
+    .grid-image {
+        height: 80px;
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .container {
@@ -2261,14 +2327,6 @@ html, body {
     }
     
     .contact .container {
-        max-width: 100vw;
-        width: 100%;
-        padding: 0 1rem;
-        margin: 0;
-        overflow-x: hidden;
-    }
-    
-    .footer .container {
         max-width: 100vw;
         width: 100%;
         padding: 0 1rem;

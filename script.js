@@ -1,10 +1,16 @@
 // Product Gallery Functionality
-function changeImage(thumbnail, imageSrc) {
-    document.getElementById('mainProductImage').src = imageSrc;
-    document.querySelectorAll('.thumbnail').forEach(thumb => {
-        thumb.classList.remove('active');
+function changeImage(imageSrc, clickedElement) {
+    document.getElementById('mainImage').src = imageSrc;
+    
+    // Remove active class from all grid images
+    document.querySelectorAll('.grid-image').forEach(img => {
+        img.classList.remove('active');
     });
-    thumbnail.classList.add('active');
+    
+    // Add active class to clicked element
+    if (clickedElement) {
+        clickedElement.classList.add('active');
+    }
 }
 
 // Quantity Selector Functionality
@@ -338,8 +344,15 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for animation
+// Initialize product functionality
 document.addEventListener('DOMContentLoaded', () => {
+    // Set first grid image as active by default
+    const firstGridImage = document.querySelector('.grid-image');
+    if (firstGridImage) {
+        firstGridImage.classList.add('active');
+    }
+    
+    // Observe elements for animation
     const animateElements = document.querySelectorAll('.feature-card, .stat, .contact-item, .product-card, .section-header');
     
     animateElements.forEach(el => {
