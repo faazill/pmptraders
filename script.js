@@ -837,4 +837,121 @@ function getNotificationColor(type) {
         case 'warning': return '#fbbc04';
         default: return '#1a73e8';
     }
-} 
+}
+
+// Enhanced About Section Animations
+function initAboutAnimations() {
+    const aboutSection = document.querySelector('.about');
+    const stats = document.querySelectorAll('.stat');
+    const aboutText = document.querySelector('.about-text');
+    
+    if (!aboutSection) return;
+    
+    // Create intersection observer for about section
+    const aboutObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Animate text elements
+                const textElements = entry.target.querySelectorAll('h2, p');
+                textElements.forEach((el, index) => {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(30px)';
+                    setTimeout(() => {
+                        el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                        el.style.opacity = '1';
+                        el.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+                
+                // Animate stats with staggered delay
+                stats.forEach((stat, index) => {
+                    stat.style.opacity = '0';
+                    stat.style.transform = 'translateY(50px) scale(0.8)';
+                    setTimeout(() => {
+                        stat.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
+                        stat.style.opacity = '1';
+                        stat.style.transform = 'translateY(0) scale(1)';
+                    }, 800 + (index * 300));
+                });
+                
+                aboutObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.3 });
+    
+    aboutObserver.observe(aboutSection);
+    
+    // Add interactive hover effects for stats
+    stats.forEach(stat => {
+        stat.addEventListener('mouseenter', function() {
+            // Add ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.cssText = `
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 0;
+                height: 0;
+                background: radial-gradient(circle, rgba(26, 115, 232, 0.2) 0%, transparent 70%);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                animation: rippleExpand 0.6s ease-out;
+                pointer-events: none;
+            `;
+            
+            this.style.position = 'relative';
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                if (ripple.parentNode) {
+                    ripple.remove();
+                }
+            }, 600);
+        });
+        
+        // Add magnetic effect
+        stat.addEventListener('mousemove', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            
+            const moveX = x * 0.1;
+            const moveY = y * 0.1;
+            
+            this.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
+        });
+        
+        stat.addEventListener('mouseleave', function() {
+            this.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+}
+
+// Add ripple animation CSS
+const rippleStyle = document.createElement('style');
+rippleStyle.textContent = `
+    @keyframes rippleExpand {
+        0% {
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+        100% {
+            width: 300px;
+            height: 300px;
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(rippleStyle);
+
+// Initialize about animations when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initAboutAnimations();
+    
+    // Existing code...
+    const statElements = document.querySelectorAll('.stat');
+    statElements.forEach(stat => {
+        statsObserver.observe(stat);
+    });
+}); 
