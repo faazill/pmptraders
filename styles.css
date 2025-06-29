@@ -51,6 +51,11 @@ html, body {
     gap: 12px;
 }
 
+.nav-logo a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .nav-logo h2 {
     background: linear-gradient(135deg, #1a73e8 0%, #4285f4 50%, #34a853 100%);
     background-clip: text;
