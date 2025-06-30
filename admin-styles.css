@@ -320,14 +320,39 @@ html, body {
 }
 
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .inquiries-table th,
+    .inquiries-table td {
+        padding: 0.75rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .modal-content {
+        max-width: 90%;
+        margin: 1rem;
+    }
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 0 1rem;
     }
     
+    .main-content {
+        padding: 1rem 0;
+    }
+    
     .page-header {
         padding: 1.5rem;
         margin-bottom: 1.5rem;
+    }
+    
+    .page-header h1 {
+        font-size: 1.75rem;
     }
     
     .table-header {
@@ -337,28 +362,65 @@ html, body {
         align-items: stretch;
     }
     
+    .table-header h2 {
+        font-size: 1.125rem;
+    }
+    
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
     .inquiries-table {
+        min-width: 700px;
         font-size: 0.875rem;
     }
     
     .inquiries-table th,
     .inquiries-table td {
-        padding: 0.75rem 1rem;
+        padding: 0.75rem 0.5rem;
+        white-space: nowrap;
+    }
+    
+    .inquiries-table th:first-child,
+    .inquiries-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: #f8f9fa;
+        z-index: 1;
+    }
+    
+    .inquiries-table th:last-child,
+    .inquiries-table td:last-child {
+        position: sticky;
+        right: 0;
+        background: #ffffff;
+        z-index: 1;
+        box-shadow: -2px 0 5px rgba(0,0,0,0.1);
     }
     
     .action-buttons {
         flex-direction: column;
         gap: 0.25rem;
+        min-width: 80px;
     }
     
     .action-buttons .btn {
         width: 100%;
         justify-content: center;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+    
+    .inquiry-type {
+        font-size: 0.625rem;
+        padding: 0.2rem 0.5rem;
     }
     
     .modal-content {
         width: 95%;
         margin: 1rem;
+        max-height: 90vh;
     }
     
     .modal-header,
@@ -366,19 +428,191 @@ html, body {
     .modal-footer {
         padding: 1rem 1.5rem;
     }
+    
+    .modal-header h2 {
+        font-size: 1.125rem;
+    }
+    
+    .detail-field {
+        margin-bottom: 1rem;
+    }
+    
+    .detail-field label {
+        font-size: 0.75rem;
+    }
+    
+    .detail-field .value {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.875rem;
+    }
+    
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100%);
+    }
+    
+    .notification.show {
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 480px) {
     .main-content {
-        padding: 1rem 0;
+        padding: 0.5rem 0;
+    }
+    
+    .page-header {
+        padding: 1rem;
+        margin-bottom: 1rem;
     }
     
     .page-header h1 {
         font-size: 1.5rem;
     }
     
-    .btn {
-        padding: 0.5rem 1rem;
+    .page-header p {
+        font-size: 0.875rem;
+    }
+    
+    .table-header {
+        padding: 1rem;
+    }
+    
+    .table-header h2 {
+        font-size: 1rem;
+    }
+    
+    .inquiries-table {
+        min-width: 600px;
         font-size: 0.75rem;
+    }
+    
+    .inquiries-table th,
+    .inquiries-table td {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .action-buttons .btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+    
+    .btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .modal-content {
+        width: 98%;
+        margin: 0.5rem;
+        max-height: 95vh;
+    }
+    
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: 1rem;
+    }
+    
+    .modal-header h2 {
+        font-size: 1rem;
+    }
+    
+    .detail-field {
+        margin-bottom: 0.75rem;
+    }
+    
+    .detail-field label {
+        font-size: 0.7rem;
+    }
+    
+    .detail-field .value {
+        padding: 0.6rem;
+        font-size: 0.8rem;
+    }
+    
+    .inquiry-type {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.4rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .page-header h1 {
+        font-size: 1.25rem;
+    }
+    
+    .inquiries-table {
+        min-width: 500px;
+        font-size: 0.7rem;
+    }
+    
+    .action-buttons .btn {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.65rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 500px) and (orientation: landscape) {
+    .modal-content {
+        max-height: 95vh;
+    }
+    
+    .modal-body {
+        max-height: 50vh;
+    }
+    
+    .page-header {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .page-header h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0.25rem;
+    }
+}
+
+/* High DPI displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .inquiries-table {
+        border-width: 0.5px;
+    }
+    
+    .modal-content {
+        border-width: 0.5px;
+    }
+}
+
+/* Print styles */
+@media print {
+    .action-buttons,
+    .table-header button,
+    .modal-overlay {
+        display: none !important;
+    }
+    
+    .inquiries-table {
+        border-collapse: collapse;
+    }
+    
+    .inquiries-table th,
+    .inquiries-table td {
+        border: 1px solid #000;
+        padding: 0.5rem;
     }
 } 
