@@ -1979,50 +1979,96 @@ html, body {
 
 .quantity-selector {
     margin-bottom: 1.5rem;
+    background: #f8f9fa;
+    border: 1px solid #e8eaed;
+    border-radius: 8px;
+    padding: 1.25rem;
 }
 
 .quantity-selector label {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
     font-weight: 500;
     color: #202124;
     font-size: 0.875rem;
+    font-family: 'Google Sans', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .quantity-controls {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    max-width: 150px;
+    gap: 0.75rem;
+    max-width: 180px;
+    background: #ffffff;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    padding: 0.25rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
 }
 
 .quantity-controls button {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #e8eaed;
-    background: #ffffff;
-    border-radius: 6px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: #f8f9fa;
+    border-radius: 4px;
     cursor: pointer;
     font-size: 1.125rem;
-    font-weight: 500;
-    color: #202124;
-    transition: all 0.3s ease;
+    font-weight: 600;
+    color: #5f6368;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Google Sans', sans-serif;
 }
 
 .quantity-controls button:hover {
     background: #1a73e8;
     color: #ffffff;
-    border-color: #1a73e8;
+    transform: scale(1.05);
+}
+
+.quantity-controls button:active {
+    transform: scale(0.95);
+}
+
+.quantity-controls button:disabled {
+    background: #f1f3f4;
+    color: #dadce0;
+    cursor: not-allowed;
+    transform: none;
 }
 
 #quantity {
     flex: 1;
-    height: 40px;
-    border: 1px solid #e8eaed;
-    border-radius: 6px;
+    height: 36px;
+    border: none;
+    background: transparent;
     text-align: center;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #202124;
+    font-family: 'Google Sans', sans-serif;
+    outline: none;
+    min-width: 60px;
+}
+
+#quantity:focus {
+    background: #e8f0fe;
+    border-radius: 4px;
+}
+
+#quantity::-webkit-inner-spin-button,
+#quantity::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+#quantity[type=number] {
+    -moz-appearance: textfield;
 }
 
 .product-actions {
@@ -3276,18 +3322,34 @@ html, body {
         flex-direction: column;
         gap: 0.75rem;
     }
-    
+
     .product-actions .btn {
-        flex: none;
         width: 100%;
-        min-width: auto;
-        padding: 1rem;
-        font-size: 0.875rem;
+        justify-content: center;
+    }
+
+    .btn-buy-now,
+    .btn-get-quote {
+        width: 100%;
+        margin-bottom: 0.5rem;
     }
     
-    .btn-buy-now,
-    .btn-share {
-        min-width: auto;
-        width: 100%;
+    .quantity-selector {
+        padding: 1rem;
+    }
+    
+    .quantity-controls {
+        max-width: 160px;
+    }
+    
+    .quantity-controls button {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+    
+    #quantity {
+        height: 32px;
+        font-size: 0.875rem;
     }
 } 

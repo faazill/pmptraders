@@ -23,7 +23,32 @@ function changeQuantity(delta) {
     if (newQty > 10) newQty = 10;
     
     quantityInput.value = newQty;
-    updateTotalPrice();
+    updateOrderSummary();
+}
+
+// Increase quantity function
+function increaseQuantity() {
+    changeQuantity(1);
+}
+
+// Decrease quantity function
+function decreaseQuantity() {
+    changeQuantity(-1);
+}
+
+// Update order summary based on quantity
+function updateOrderSummary() {
+    const quantity = parseInt(document.getElementById('quantity').value);
+    const basePrice = 6499; // Price from product1.html
+    const subtotal = quantity * basePrice;
+    const gst = Math.round(subtotal * 0.18); // 18% GST
+    const total = subtotal + gst;
+    
+    // Update order summary elements
+    document.getElementById('order-qty').textContent = quantity;
+    document.getElementById('order-subtotal').textContent = `₹${subtotal.toLocaleString('en-IN')}`;
+    document.getElementById('order-gst').textContent = `₹${gst.toLocaleString('en-IN')}`;
+    document.getElementById('order-total').textContent = `₹${total.toLocaleString('en-IN')}`;
 }
 
 // Update total price based on quantity
@@ -55,16 +80,9 @@ function addToCart() {
 
 // Buy Now Functionality
 function buyNow() {
-    const quantity = parseInt(document.getElementById('quantity').value);
-    const productName = 'AQUA Water Purifier';
-    const price = 4999;
-    const total = quantity * price;
-    
-    showNotification(`Redirecting to checkout for ${quantity} ${productName}. Total: ₹${total.toLocaleString('en-IN')}`, 'info');
-    
-    setTimeout(() => {
-        showNotification('Checkout page coming soon!', 'info');
-    }, 1500);
+    // Redirect to checkout page
+    const quantity = document.getElementById('quantity') ? document.getElementById('quantity').value : 1;
+    window.location.href = `checkout.html?quantity=${quantity}`;
 }
 
 // Get Quote Functionality
@@ -205,6 +223,39 @@ document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', 
     hamburger.classList.remove('active');
     navMenu.classList.remove('active');
 }));
+
+// Quantity input event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInput = document.getElementById('quantity');
+    if (quantityInput) {
+        // Handle direct input changes
+        quantityInput.addEventListener('input', function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 1) {
+                this.value = 1;
+                value = 1;
+            } else if (value > 10) {
+                this.value = 10;
+                value = 10;
+            }
+            updateOrderSummary();
+        });
+        
+        // Handle blur event to ensure valid value
+        quantityInput.addEventListener('blur', function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 1) {
+                this.value = 1;
+            } else if (value > 10) {
+                this.value = 10;
+            }
+            updateOrderSummary();
+        });
+        
+        // Initialize order summary on page load
+        updateOrderSummary();
+    }
+});
 
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {

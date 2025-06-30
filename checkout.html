@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | aquavalor</title>
+    <link rel="icon" type="image/png" href="assets/logo.png?v=1">
+    <link rel="shortcut icon" type="image/png" href="assets/logo.png?v=1">
+    <link rel="apple-touch-icon" href="assets/logo.png?v=1">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="checkout.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="back-section">
+        <a href="product1.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            Back to Product
+        </a>
+    </div>
+    
+    <main class="container checkout-flex">
+        <div class="checkout-form-section aquaultra-style">
+            <form id="checkout-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="first-name">First Name</label>
+                        <input type="text" id="first-name" name="first-name" required autocomplete="given-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last-name">Last Name</label>
+                        <input type="text" id="last-name" name="last-name" required autocomplete="family-name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="country">Country</label>
+                    <input type="text" id="country" name="country" value="India" required autocomplete="country" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="street-address">Street Address</label>
+                    <input type="text" id="street-address" name="street-address" required autocomplete="street-address">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">Town/City</label>
+                        <input type="text" id="city" name="city" required autocomplete="address-level2">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State</label>
+                        <select id="state" name="state" required>
+                            <option value="">Select State</option>
+                            <option value="Andhra Pradesh">Andhra Pradesh</option>
+                            <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                            <option value="Assam">Assam</option>
+                            <option value="Bihar">Bihar</option>
+                            <option value="Chhattisgarh">Chhattisgarh</option>
+                            <option value="Goa">Goa</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Haryana">Haryana</option>
+                            <option value="Himachal Pradesh">Himachal Pradesh</option>
+                            <option value="Jharkhand">Jharkhand</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Kerala">Kerala</option>
+                            <option value="Madhya Pradesh">Madhya Pradesh</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Manipur">Manipur</option>
+                            <option value="Meghalaya">Meghalaya</option>
+                            <option value="Mizoram">Mizoram</option>
+                            <option value="Nagaland">Nagaland</option>
+                            <option value="Odisha">Odisha</option>
+                            <option value="Punjab">Punjab</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Sikkim">Sikkim</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Telangana">Telangana</option>
+                            <option value="Tripura">Tripura</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="Uttarakhand">Uttarakhand</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                            <option value="Ladakh">Ladakh</option>
+                            <option value="Chandigarh">Chandigarh</option>
+                            <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                            <option value="Lakshadweep">Lakshadweep</option>
+                            <option value="Puducherry">Puducherry</option>
+                            <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="pincode">Pincode</label>
+                        <input type="text" id="pincode" name="pincode" required autocomplete="postal-code">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="tel" id="phone" name="phone" required autocomplete="tel">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="gstin">GSTIN Number <span style="font-weight:normal; color:#888;">(optional)</span></label>
+                    <input type="text" id="gstin" name="gstin" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label for="order-notes">Order Notes</label>
+                    <textarea id="order-notes" name="order-notes" rows="2" autocomplete="off"></textarea>
+                </div>
+            </form>
+        </div>
+        <div class="checkout-summary-section aquaultra-style">
+            <h2>Order Summary</h2>
+            <div class="order-product">
+                <img src="assets/waterpurifier2.png" alt="AQUAVALOR Water Purifier" class="order-product-img">
+                <div class="order-product-details">
+                    <div class="order-product-name">AQUAVALOR Water Purifier RO + Alkaline</div>
+                    <div class="order-product-price">₹4,999</div>
+                    <div class="order-product-qty">Quantity: <span id="order-qty">1</span></div>
+                </div>
+            </div>
+            <div class="order-summary-details">
+                <div class="order-summary-row">
+                    <span>Subtotal:</span>
+                    <span id="order-subtotal">₹4,999</span>
+                </div>
+                <div class="order-summary-row" id="discount-row" style="display: none;">
+                    <span>Discount:</span>
+                    <span id="order-discount">-₹0</span>
+                </div>
+                <div class="order-summary-row">
+                    <span>GST (18%):</span>
+                    <span id="order-gst">₹900</span>
+                </div>
+                <div class="order-summary-row total-row">
+                    <span>Total:</span>
+                    <span id="order-total">₹5,899</span>
+                </div>
+            </div>
+            <div class="coupon-section">
+                <h3>Coupon Code</h3>
+                <div class="coupon-input-group">
+                    <input type="text" id="coupon-code" name="coupon-code" placeholder="Enter coupon code" autocomplete="off">
+                    <button type="button" id="apply-coupon-btn" class="apply-coupon-btn">Apply</button>
+                </div>
+            </div>
+            <div class="payment-section">
+                <h3>Payment Method</h3>
+                <div class="payment-methods-row">
+                    <label class="payment-method-card">
+                        <input type="radio" name="payment" value="prepaid" checked>
+                        <div class="payment-method-content">
+                            <span class="payment-icon"><i class="fas fa-credit-card"></i></span>
+                            <span class="payment-text">Prepaid</span>
+                        </div>
+                    </label>
+                    <label class="payment-method-card">
+                        <input type="radio" name="payment" value="cod">
+                        <div class="payment-method-content">
+                            <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                            <span class="payment-text">Cash on Delivery</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large aquaultra-btn" id="place-order-btn" form="checkout-form">
+                <i class="fas fa-shopping-cart"></i>
+                Place Order
+            </button>
+        </div>
+    </main>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="checkout.js"></script>
+</body>
+</html> 
