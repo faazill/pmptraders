@@ -88,12 +88,107 @@ window.addEventListener('click', function(e) {
 });
 
 // Handle wholesaler quote form submission
-function submitWholesalerQuote(event) {
+async function submitWholesalerQuote(event) {
     event.preventDefault();
-    // You can add AJAX/email logic here. For now, just show a notification.
-    showNotification('Thank you! Your wholesaler quote request has been submitted.', 'success');
-    closeQuoteModal();
-    document.getElementById('wholesalerQuoteForm').reset();
+    
+    console.log('Wholesaler quote form submission started...');
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const quoteData = {
+        businessName: formData.get('businessName'),
+        contactPerson: formData.get('contactPerson'),
+        mobile: formData.get('mobile'),
+        email: formData.get('email'),
+        gst: formData.get('gst'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        state: formData.get('state'),
+        pincode: formData.get('pincode'),
+        nature: formData.get('nature'),
+        requirement: formData.get('requirement'),
+        message: formData.get('message'),
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        type: 'wholesaler_quote'
+    };
+    
+    console.log('Wholesaler quote data to submit:', quoteData);
+    
+    // Get the submit button
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+    
+    try {
+        // Check if Firebase is initialized
+        if (!firebase || !firebase.database) {
+            throw new Error('Firebase is not properly initialized');
+        }
+        
+        // Check if database is available
+        if (!database) {
+            throw new Error('Realtime Database is not available');
+        }
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+        
+        console.log('Attempting to add wholesaler quote to Firebase...');
+        
+        // Store in Firebase
+        const docRef = database.ref('inquiries').push(quoteData);
+        
+        console.log('Wholesaler quote document written with ID: ', docRef.key);
+        
+        // Show success state briefly
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+        submitBtn.style.background = '#34a853';
+        
+        // Show success message
+        showNotification('Thank you! Your wholesaler quote request has been submitted.', 'success');
+        
+        // Reset form
+        form.reset();
+        
+        // Close modal after a short delay
+        setTimeout(() => {
+            closeQuoteModal();
+        }, 1500);
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error submitting wholesaler quote form:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
+        
+        let errorMessage = 'Error submitting quote request. Please try again.';
+        
+        // Provide more specific error messages
+        if (error.code === 'permission-denied') {
+            errorMessage = 'Permission denied. Please check Firebase security rules.';
+        } else if (error.code === 'unavailable') {
+            errorMessage = 'Service temporarily unavailable. Please try again later.';
+        } else if (error.message.includes('Firebase is not properly initialized')) {
+            errorMessage = 'System error. Please refresh the page and try again.';
+        }
+        
+        showNotification(errorMessage, 'error');
+        
+        // Reset button state on error
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+    }
 }
 
 // Mobile Navigation Toggle
@@ -177,184 +272,242 @@ window.addEventListener('scroll', () => {
     }
 })();
 
-// Contact Form Submission with direct email service
-function submitForm(event) {
+// Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyA8G4a8Hlxd_B73OCUETboBB0nT7SBOSDo",
+    authDomain: "aquavalor-c8e59.firebaseapp.com",
+    databaseURL: "https://aquavalor-c8e59-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "aquavalor-c8e59",
+    storageBucket: "aquavalor-c8e59.firebasestorage.app",
+    messagingSenderId: "923902120858",
+    appId: "1:923902120858:web:d516a29f32e2c61bed6023",
+    measurementId: "G-TY5VK0M9YQ"
+};
+
+// Initialize Firebase
+let database;
+try {
+    console.log('Initializing Firebase...');
+    firebase.initializeApp(firebaseConfig);
+    database = firebase.database();
+    console.log('Firebase initialized successfully');
+    console.log('Realtime Database instance:', database);
+} catch (error) {
+    console.error('Error initializing Firebase:', error);
+}
+
+// Contact Form Submission
+async function submitForm(event) {
     event.preventDefault();
     
-    const form = document.getElementById('contactForm');
+    console.log('Form submission started...');
+    
+    const form = event.target;
     const formData = new FormData(form);
     
-    // Get form values
-    const name = formData.get('name');
-    const email = formData.get('email');
-    const subject = formData.get('subject');
-    const message = formData.get('message');
+    const contactData = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        subject: formData.get('subject'),
+        message: formData.get('message'),
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        type: 'contact'
+    };
     
-    // Validate form
-    if (!name || !email || !subject || !message) {
-        showNotification('Please fill in all required fields.', 'error');
-        return;
-    }
+    console.log('Contact data to submit:', contactData);
     
-    // Show loading state
+    // Get the submit button
     const submitBtn = form.querySelector('.btn-submit');
     const originalText = submitBtn.innerHTML;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-    submitBtn.disabled = true;
     
-    // Method 1: Try EmailJS (if properly configured)
-    if (typeof emailjs !== 'undefined' && emailjs.init && "YOUR_PUBLIC_KEY" !== "YOUR_PUBLIC_KEY") {
-        const templateParams = {
-            to_email: 'taskaelite@gmail.com',
-            from_name: name,
-            from_email: email,
-            subject: subject,
-            message: message,
-            reply_to: email
-        };
+    try {
+        // Check if Firebase is initialized
+        if (!firebase || !firebase.database) {
+            throw new Error('Firebase is not properly initialized');
+        }
         
-        emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
-            .then(function(response) {
-                console.log('SUCCESS!', response.status, response.text);
-                showNotification('Thank you! Your message has been sent successfully.', 'success');
-                form.reset();
-            }, function(error) {
-                console.log('FAILED...', error);
-                // Fallback to Formspree
-                sendViaFormspree(formData, submitBtn, originalText);
-            })
-            .finally(() => {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-            });
-    } else {
-        // Method 2: Use Formspree (free service)
-        sendViaFormspree(formData, submitBtn, originalText);
-    }
-}
-
-// Fallback email service using Formspree
-function sendViaFormspree(formData, submitBtn, originalText) {
-    // Create a temporary form for Formspree
-    const tempForm = document.createElement('form');
-    tempForm.method = 'POST';
-    tempForm.action = 'https://formspree.io/f/YOUR_FORMSPREE_ID'; // You'll need to replace this
-    tempForm.style.display = 'none';
-    
-    // Add form data
-    formData.forEach((value, key) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = key;
-        input.value = value;
-        tempForm.appendChild(input);
-    });
-    
-    // Add recipient email
-    const recipientInput = document.createElement('input');
-    recipientInput.type = 'hidden';
-    recipientInput.name = '_replyto';
-    recipientInput.value = 'taskaelite@gmail.com';
-    tempForm.appendChild(recipientInput);
-    
-    // Add subject
-    const subjectInput = document.createElement('input');
-    subjectInput.type = 'hidden';
-    subjectInput.name = '_subject';
-    subjectInput.value = `New Contact Form Submission: ${formData.get('subject')}`;
-    tempForm.appendChild(subjectInput);
-    
-    // Submit the form
-    document.body.appendChild(tempForm);
-    
-    fetch(tempForm.action, {
-        method: 'POST',
-        body: new FormData(tempForm),
-        headers: {
-            'Accept': 'application/json'
+        // Check if database is available
+        if (!database) {
+            throw new Error('Realtime Database is not available');
         }
-    })
-    .then(response => {
-        if (response.ok) {
-            showNotification('Thank you! Your message has been sent successfully.', 'success');
-            document.getElementById('contactForm').reset();
-        } else {
-            throw new Error('Network response was not ok');
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        submitBtn.disabled = true;
+        
+        console.log('Attempting to add document to Firebase...');
+        
+        // Store in Firebase
+        const docRef = database.ref('inquiries').push(contactData);
+        
+        console.log('Document written with ID: ', docRef.key);
+        
+        // Show success state briefly
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+        submitBtn.style.background = '#34a853';
+        
+        // Show success message
+        showNotification('Message sent successfully! We\'ll get back to you soon.', 'success');
+        
+        // Reset form
+        form.reset();
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
+        
+        let errorMessage = 'Error sending message. Please try again.';
+        
+        // Provide more specific error messages
+        if (error.code === 'permission-denied') {
+            errorMessage = 'Permission denied. Please check Firebase security rules.';
+        } else if (error.code === 'unavailable') {
+            errorMessage = 'Service temporarily unavailable. Please try again later.';
+        } else if (error.message.includes('Firebase is not properly initialized')) {
+            errorMessage = 'System error. Please refresh the page and try again.';
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showNotification('Sorry, there was an error sending your message. Please try again.', 'error');
-    })
-    .finally(() => {
-        // Clean up
-        document.body.removeChild(tempForm);
+        
+        showNotification(errorMessage, 'error');
+        
+        // Reset button state on error
         submitBtn.innerHTML = originalText;
         submitBtn.disabled = false;
-    });
-}
-
-// Email validation function
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
+        submitBtn.style.background = '';
     }
+}
+
+// Quote Form Submission
+async function submitQuoteForm(event) {
+    event.preventDefault();
     
-    // Create notification element
+    console.log('Quote form submission started...');
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const quoteData = {
+        companyName: formData.get('companyName'),
+        contactPerson: formData.get('contactPerson'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        gstNumber: formData.get('gstNumber'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        state: formData.get('state'),
+        pincode: formData.get('pincode'),
+        quantity: formData.get('quantity'),
+        additionalInfo: formData.get('additionalInfo'),
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        type: 'quote'
+    };
+    
+    console.log('Quote data to submit:', quoteData);
+    
+    // Get the submit button
+    const submitBtn = form.querySelector('.btn-submit');
+    const originalText = submitBtn.innerHTML;
+    
+    try {
+        // Check if Firebase is initialized
+        if (!firebase || !firebase.database) {
+            throw new Error('Firebase is not properly initialized');
+        }
+        
+        // Check if database is available
+        if (!database) {
+            throw new Error('Realtime Database is not available');
+        }
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+        submitBtn.disabled = true;
+        
+        // Store in Firebase
+        const docRef = database.ref('inquiries').push(quoteData);
+        
+        console.log('Quote document written with ID: ', docRef.key);
+        
+        // Show success state briefly
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+        submitBtn.style.background = '#34a853';
+        
+        // Show success message
+        showNotification('Quote request submitted successfully! We\'ll contact you soon.', 'success');
+        
+        // Reset form
+        form.reset();
+        
+        // Close modal after a short delay
+        setTimeout(() => {
+            closeModal();
+        }, 1500);
+        
+        // Reset button after 3 seconds
+        setTimeout(() => {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '';
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error submitting quote form:', error);
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            stack: error.stack
+        });
+        
+        let errorMessage = 'Error submitting quote request. Please try again.';
+        
+        // Provide more specific error messages
+        if (error.code === 'permission-denied') {
+            errorMessage = 'Permission denied. Please check Firebase security rules.';
+        } else if (error.code === 'unavailable') {
+            errorMessage = 'Service temporarily unavailable. Please try again later.';
+        } else if (error.message.includes('Firebase is not properly initialized')) {
+            errorMessage = 'System error. Please refresh the page and try again.';
+        }
+        
+        showNotification(errorMessage, 'error');
+        
+        // Reset button state on error
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+        submitBtn.style.background = '';
+    }
+}
+
+// Notification function
+function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
         <div class="notification-content">
-            <span class="notification-message">${message}</span>
-            <button class="notification-close">&times;</button>
+            <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
+            <span>${message}</span>
         </div>
     `;
     
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background: ${type === 'success' ? '#34a853' : type === 'error' ? '#ea4335' : '#1a73e8'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        z-index: 10000;
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    // Add to page
     document.body.appendChild(notification);
     
-    // Animate in
-    setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
+    // Show notification
+    setTimeout(() => notification.classList.add('show'), 100);
     
-    // Close button functionality
-    const closeBtn = notification.querySelector('.notification-close');
-    closeBtn.addEventListener('click', () => {
-        notification.style.transform = 'translateX(100%)';
+    // Remove notification after 5 seconds
+    setTimeout(() => {
+        notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
-    });
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => notification.remove(), 300);
-        }
     }, 5000);
 }
 
@@ -769,17 +922,17 @@ function handleSwipe() {
     }
 }
 
-// Share Product Functionality
+// Share Product Function
 function shareProduct() {
     const productName = 'AQUA Water Purifier';
     const productUrl = window.location.href;
-    const shareText = `Check out this amazing ${productName} from PMP Traders! ${productUrl}`;
+    const shareText = `Check out this amazing ${productName} from Aquavalor! ${productUrl}`;
     
     // Check if Web Share API is available
     if (navigator.share) {
         navigator.share({
             title: productName,
-            text: `Check out this amazing ${productName} from PMP Traders!`,
+            text: `Check out this amazing ${productName} from Aquavalor!`,
             url: productUrl
         }).then(() => {
             showNotification('Product shared successfully!', 'success');
@@ -818,186 +971,6 @@ function fallbackShare(shareText) {
     }
 }
 
-// Enhanced notification system
-function showNotification(message, type = 'info') {
-    // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => notification.remove());
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas ${getNotificationIcon(type)}"></i>
-            <span>${message}</span>
-            <button class="notification-close" onclick="this.parentElement.parentElement.remove()">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${getNotificationColor(type)};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        z-index: 10000;
-        max-width: 400px;
-        animation: slideInRight 0.3s ease;
-    `;
-    
-    // Add to page
-    document.body.appendChild(notification);
-    
-    // Auto remove after 5 seconds
-    setTimeout(() => {
-        if (notification.parentElement) {
-            notification.remove();
-        }
-    }, 5000);
-}
-
-function getNotificationIcon(type) {
-    switch (type) {
-        case 'success': return 'fa-check-circle';
-        case 'error': return 'fa-exclamation-circle';
-        case 'warning': return 'fa-exclamation-triangle';
-        default: return 'fa-info-circle';
-    }
-}
-
-function getNotificationColor(type) {
-    switch (type) {
-        case 'success': return '#34a853';
-        case 'error': return '#ea4335';
-        case 'warning': return '#fbbc04';
-        default: return '#1a73e8';
-    }
-}
-
-// Enhanced About Section Animations
-function initAboutAnimations() {
-    const aboutSection = document.querySelector('.about');
-    const stats = document.querySelectorAll('.stat');
-    const aboutText = document.querySelector('.about-text');
-    
-    if (!aboutSection) return;
-    
-    // Create intersection observer for about section
-    const aboutObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                // Animate text elements
-                const textElements = entry.target.querySelectorAll('h2, p');
-                textElements.forEach((el, index) => {
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(30px)';
-                    setTimeout(() => {
-                        el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateY(0)';
-                    }, index * 200);
-                });
-                
-                // Animate stats with staggered delay
-                stats.forEach((stat, index) => {
-                    stat.style.opacity = '0';
-                    stat.style.transform = 'translateY(50px) scale(0.8)';
-                    setTimeout(() => {
-                        stat.style.transition = 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-                        stat.style.opacity = '1';
-                        stat.style.transform = 'translateY(0) scale(1)';
-                    }, 800 + (index * 300));
-                });
-                
-                aboutObserver.unobserve(entry.target);
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    aboutObserver.observe(aboutSection);
-    
-    // Add interactive hover effects for stats
-    stats.forEach(stat => {
-        stat.addEventListener('mouseenter', function() {
-            // Add ripple effect
-            const ripple = document.createElement('div');
-            ripple.style.cssText = `
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 0;
-                height: 0;
-                background: radial-gradient(circle, rgba(26, 115, 232, 0.2) 0%, transparent 70%);
-                border-radius: 50%;
-                transform: translate(-50%, -50%);
-                animation: rippleExpand 0.6s ease-out;
-                pointer-events: none;
-            `;
-            
-            this.style.position = 'relative';
-            this.appendChild(ripple);
-            
-            setTimeout(() => {
-                if (ripple.parentNode) {
-                    ripple.remove();
-                }
-            }, 600);
-        });
-        
-        // Add magnetic effect
-        stat.addEventListener('mousemove', function(e) {
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            
-            const moveX = x * 0.1;
-            const moveY = y * 0.1;
-            
-            this.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.02)`;
-        });
-        
-        stat.addEventListener('mouseleave', function() {
-            this.style.transform = 'translate(0, 0) scale(1)';
-        });
-    });
-}
-
-// Add ripple animation CSS
-const rippleStyle = document.createElement('style');
-rippleStyle.textContent = `
-    @keyframes rippleExpand {
-        0% {
-            width: 0;
-            height: 0;
-            opacity: 1;
-        }
-        100% {
-            width: 300px;
-            height: 300px;
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(rippleStyle);
-
-// Initialize about animations when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    initAboutAnimations();
-    
-    // Existing code...
-    const statElements = document.querySelectorAll('.stat');
-    statElements.forEach(stat => {
-        statsObserver.observe(stat);
-    });
-});
-
 // WhatsApp Functionality
 function openWhatsApp() {
     const phoneNumber = '919946170056';
@@ -1009,4 +982,38 @@ function openWhatsApp() {
     
     // Show notification
     showNotification('Opening WhatsApp...', 'info');
-} 
+}
+
+// Quote Modal Functions
+function openQuoteModal() {
+    const modal = document.getElementById('quoteModal');
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeQuoteModal() {
+    const modal = document.getElementById('quoteModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Reset form
+    const form = document.getElementById('quoteForm');
+    if (form) {
+        form.reset();
+    }
+}
+
+// Close modal when clicking outside
+document.addEventListener('click', function(event) {
+    const modal = document.getElementById('quoteModal');
+    if (event.target === modal) {
+        closeQuoteModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeQuoteModal();
+    }
+});

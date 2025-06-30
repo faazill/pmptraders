@@ -872,68 +872,61 @@ html, body {
     display: flex;
     gap: 1rem;
     margin-top: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .product-actions .btn {
     flex: 1;
-    padding: 0.875rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
+    min-width: 140px;
     justify-content: center;
-    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border-radius: 8px;
     transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-family: 'Google Sans', sans-serif;
 }
 
 .product-actions .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .product-actions .btn-primary {
-    background: linear-gradient(135deg, #1a73e8, #1557b0);
+    background: linear-gradient(135deg, #1a73e8, #4285f4);
     color: white;
     border: none;
+    box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
 }
 
 .product-actions .btn-primary:hover {
-    background: linear-gradient(135deg, #1557b0, #0d47a1);
+    background: linear-gradient(135deg, #1557b0, #1a73e8);
+    box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
     color: white;
-    text-decoration: none;
 }
 
 .btn-buy-now {
-    background: linear-gradient(135deg, #10b981, #059669) !important;
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    background: linear-gradient(135deg, #1a73e8, #4285f4);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(26, 115, 232, 0.3);
+    min-width: 180px;
+    width: auto;
+    justify-content: center;
     position: relative;
     overflow: hidden;
 }
 
-.btn-buy-now::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.btn-buy-now:hover::before {
-    left: 100%;
-}
-
 .btn-buy-now:hover {
-    background: linear-gradient(135deg, #059669, #047857) !important;
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, #1557b0, #1a73e8);
+    box-shadow: 0 6px 20px rgba(26, 115, 232, 0.4);
     color: white;
-    text-decoration: none;
+    transform: translateY(-2px);
 }
 
 .btn-buy-now .fa-arrow-right {
@@ -950,12 +943,16 @@ html, body {
     color: white;
     border: none;
     box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+    min-width: 140px;
+    width: auto;
+    justify-content: center;
 }
 
 .btn-share:hover {
     background: linear-gradient(135deg, #4b5563, #374151);
     box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
     color: white;
+    transform: translateY(-2px);
 }
 
 /* Delivery Info */
@@ -1120,6 +1117,8 @@ html, body {
 .about-text {
     position: relative;
     overflow: visible;
+    max-width: 500px;
+    width: 100%;
 }
 
 .about-text::before {
@@ -1159,6 +1158,7 @@ html, body {
     font-family: 'Google Sans', sans-serif;
     position: relative;
     line-height: 1.2;
+    width: 100%;
 }
 
 .about-text h2::after {
@@ -1181,6 +1181,7 @@ html, body {
     font-weight: 400;
     position: relative;
     z-index: 2;
+    width: 100%;
 }
 
 .about-text p:first-of-type {
@@ -1195,6 +1196,7 @@ html, body {
     gap: 2rem;
     position: relative;
     overflow: visible;
+    width: 100%;
 }
 
 .stat {
@@ -1207,6 +1209,8 @@ html, body {
     overflow: visible;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     cursor: pointer;
+    min-width: 200px;
+    width: 100%;
 }
 
 .stat::before {
@@ -1256,6 +1260,8 @@ html, body {
     transition: all 0.4s ease;
     min-height: auto;
     display: block;
+    width: 100%;
+    min-width: 120px;
 }
 
 .stat:hover h3 {
@@ -1276,6 +1282,8 @@ html, body {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.4s ease;
+    width: 100%;
+    min-width: 100px;
 }
 
 .stat:hover p {
@@ -3183,5 +3191,103 @@ html, body {
         width: 50px;
         height: 50px;
         font-size: 22px;
+    }
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #ffffff;
+    color: #202124;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 10000;
+    max-width: 400px;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #e8eaed;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.notification-content i {
+    font-size: 1.125rem;
+    flex-shrink: 0;
+}
+
+.notification-success {
+    background: #e6f4ea;
+    border-color: #34a853;
+    color: #137333;
+}
+
+.notification-success .notification-content i {
+    color: #34a853;
+}
+
+.notification-error {
+    background: #fce8e6;
+    border-color: #ea4335;
+    color: #c5221f;
+}
+
+.notification-error .notification-content i {
+    color: #ea4335;
+}
+
+.notification-info {
+    background: #e8f0fe;
+    border-color: #1a73e8;
+    color: #174ea6;
+}
+
+.notification-info .notification-content i {
+    color: #1a73e8;
+}
+
+/* Mobile responsive notifications */
+@media (max-width: 768px) {
+    .notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        max-width: none;
+        transform: translateY(-100%);
+    }
+    
+    .notification.show {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .product-actions {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .product-actions .btn {
+        flex: none;
+        width: 100%;
+        min-width: auto;
+        padding: 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .btn-buy-now,
+    .btn-share {
+        min-width: auto;
+        width: 100%;
     }
 } 
