@@ -310,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div style="font-size:2rem;color:#34a853;margin-bottom:1rem;"><i class='fas fa-check-circle'></i></div>
                 <h2 style="margin:0 0 0.5rem 0;font-size:1.125rem;font-weight:500;color:#202124;font-family:'Google Sans',sans-serif;">Payment Successful!</h2>
                 <p style="color:#5f6368;font-size:0.875rem;margin:0 0 1rem 0;font-family:'Google Sans',sans-serif;">Your order has been placed successfully. Thank you for shopping with us!</p>
-                <button style="margin-top:1rem;padding:0.75rem 1.5rem;font-size:0.875rem;border-radius:4px;background:#1a73e8;color:#fff;font-weight:500;border:none;cursor:pointer;font-family:'Google Sans',sans-serif;transition:background-color 0.2s;" onclick="window.location.href='product1.html'">Continue Shopping</button>
+                <button class="btn btn-secondary" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s;" onclick="window.location.href='productpages/product1.html'">Continue Shopping</button>
             </div>
         `;
         document.body.appendChild(overlay);
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h2 style="margin:0 0 0.5rem 0;font-size:1.125rem;font-weight:500;color:#202124;font-family:'Google Sans',sans-serif;">Order Confirmed!</h2>
                 <p style="color:#5f6368;font-size:0.875rem;margin:0 0 0.5rem 0;font-family:'Google Sans',sans-serif;">Thank you for your order. We'll contact you soon.</p>
                 <p style="color:#1a73e8;font-size:0.75rem;font-weight:600;margin:0;font-family:'Google Sans',sans-serif;">Order ID: ${orderId}</p>
-                <button style="margin-top:1.5rem;padding:0.75rem 1.5rem;font-size:0.875rem;border-radius:4px;background:#1a73e8;color:#fff;font-weight:500;border:none;cursor:pointer;font-family:'Google Sans',sans-serif;transition:background-color 0.2s;" onclick="window.location.href='product1.html'">Continue Shopping</button>
+                <button class="btn btn-secondary" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s;" onclick="window.location.href='productpages/product1.html'">Continue Shopping</button>
             </div>
         `;
         document.body.appendChild(overlay);

@@ -39,7 +39,7 @@ function decreaseQuantity() {
 // Update order summary based on quantity
 function updateOrderSummary() {
     const quantity = parseInt(document.getElementById('quantity').value);
-    const basePrice = 6499; // Price from product1.html
+    const basePrice = 6499; // Price from productpages/product1.html
     const subtotal = quantity * basePrice;
     const gst = Math.round(subtotal * 0.18); // 18% GST
     const total = subtotal + gst;
@@ -974,16 +974,15 @@ function handleSwipe() {
 }
 
 // Share Product Function
-function shareProduct() {
-    const productName = 'AQUA Water Purifier';
+function shareProduct(productName, productDescription) {
     const productUrl = window.location.href;
-    const shareText = `Check out this amazing ${productName} from Aquavalor! ${productUrl}`;
+    const shareText = `Check out this amazing ${productName} from Aquavalor! ${productDescription} ${productUrl}`;
     
     // Check if Web Share API is available
     if (navigator.share) {
         navigator.share({
             title: productName,
-            text: `Check out this amazing ${productName} from Aquavalor!`,
+            text: `Check out this amazing ${productName} from Aquavalor! ${productDescription}`,
             url: productUrl
         }).then(() => {
             showNotification('Product shared successfully!', 'success');
