@@ -3717,3 +3717,7 @@ html, body {
     font-size: 1.05rem;
   }
 }
+
+.footer, .footer * {
+    color: #5f6368 !important;
+}

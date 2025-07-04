@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="back-section">
-        <a href="productpages/product1.html" class="back-btn">
+        <a href="#" class="back-btn" id="back-btn">
             <i class="fas fa-arrow-left"></i>
             Back to Product
         </a>
@@ -116,10 +116,10 @@
         <div class="checkout-summary-section aquaultra-style">
             <h2>Order Summary</h2>
             <div class="order-product">
-                <img src="assets/waterpurifier2.png" alt="PMP Traders Water Purifier" class="order-product-img">
-                <div class="order-product-details">
-                    <div class="order-product-name">PMP Traders Water Purifier RO + Alkaline</div>
-                    <div class="order-product-price">₹4,999</div>
+                <img src="" alt="" class="order-product-img" id="order-product-img" style="display:none;">
+                <div class="order-product-details" id="order-product-details" style="display:none;">
+                    <div class="order-product-name" id="order-product-name"></div>
+                    <div class="order-product-price" id="order-product-price"></div>
                     <div class="order-product-qty">Quantity: <span id="order-qty">1</span></div>
                 </div>
             </div>
@@ -180,5 +180,62 @@
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="checkout.js"></script>
+    <script>
+    // Dynamically set the back button link based on the product parameter
+    document.addEventListener('DOMContentLoaded', function() {
+        const backBtn = document.getElementById('back-btn');
+        const urlParams = new URLSearchParams(window.location.search);
+        const product = urlParams.get('product');
+        if (product) {
+            backBtn.href = `productpages/${product}.html`;
+        } else {
+            backBtn.href = 'index.html#products';
+        }
+    });
+
+    // Show product details as soon as possible to avoid flash of wrong product
+    document.addEventListener('DOMContentLoaded', function() {
+        const products = {
+            'product1': {
+                name: 'AQUA 2090 RO+Alkaline Water Purifier – 10L (Premium Metallic Blue)',
+                price: 7999,
+                image: 'assets/aqua-2090-RO+Alkaline.jpeg'
+            },
+            'product2': {
+                name: 'Aqua Raga RO+Alkaline Water Purifier (Green)',
+                price: 8499,
+                image: 'assets/AQUA Raga Green.jpeg'
+            },
+            'product3': {
+                name: 'Mars RO+Alkaline Water Purifier (White + Blue)',
+                price: 7499,
+                image: 'assets/Mars White and blue.jpeg'
+            },
+            'product4': {
+                name: 'Nova Star RO Water Purifier (Without Pressure Tank)',
+                price: 7499,
+                image: 'assets/Nova Star RO under Sink without pressure Tank.jpeg'
+            },
+            'product5': {
+                name: 'Nova Star RO Water Purifier (With Pressure Tank)',
+                price: 11499,
+                image: 'assets/Nova Star RO under sink with pressure tank.jpeg'
+            }
+        };
+        const urlParams = new URLSearchParams(window.location.search);
+        const product = urlParams.get('product');
+        const selectedProduct = products[product] || products['product1'];
+        // Set image
+        const img = document.getElementById('order-product-img');
+        img.src = selectedProduct.image;
+        img.alt = selectedProduct.name;
+        img.style.display = '';
+        // Set details
+        const details = document.getElementById('order-product-details');
+        document.getElementById('order-product-name').textContent = selectedProduct.name;
+        document.getElementById('order-product-price').textContent = `₹${selectedProduct.price.toLocaleString('en-IN')}`;
+        details.style.display = '';
+    });
+    </script>
 </body>
 </html> 
