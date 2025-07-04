@@ -187,17 +187,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     <div class="detail-group">
                         <div class="detail-label">Subtotal</div>
-                        <div class="detail-value">₹${order.subtotal.toLocaleString('en-IN')}</div>
+                        <div class="detail-value">₹${order.subtotal !== undefined && order.subtotal !== null ? order.subtotal.toLocaleString('en-IN') : '-'}</div>
                     </div>
                     
                     <div class="detail-group">
                         <div class="detail-label">GST (18%)</div>
-                        <div class="detail-value">₹${order.gst.toLocaleString('en-IN')}</div>
+                        <div class="detail-value">₹${order.gst !== undefined && order.gst !== null ? order.gst.toLocaleString('en-IN') : '-'}</div>
                     </div>
                     
                     <div class="detail-group">
                         <div class="detail-label">Total Amount</div>
-                        <div class="detail-value">₹${order.total.toLocaleString('en-IN')}</div>
+                        <div class="detail-value">₹${order.total !== undefined && order.total !== null ? order.total.toLocaleString('en-IN') : '-'}</div>
                     </div>
                     
                     <div class="detail-group">

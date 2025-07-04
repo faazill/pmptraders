@@ -148,57 +148,80 @@ function displayOrderModal(order) {
     const modalBody = document.getElementById('orderModalBody');
     const statusSelect = document.getElementById('orderStatus');
     const trackingInput = document.getElementById('trackingId');
-    
+
     modalTitle.textContent = `Order Details - ${order.orderId}`;
-    
+
     // Set current status and tracking ID
     statusSelect.value = order.status || 'pending';
     trackingInput.value = order.trackingId || '';
-    
-            modalBody.innerHTML = `
-        <div class="order-details-grid">
-            <div class="detail-section">
-                <h3>Customer Information</h3>
-                <p><strong>Name:</strong> ${order.firstName} ${order.lastName}</p>
-                <p><strong>Email:</strong> ${order.email}</p>
-                <p><strong>Phone:</strong> ${order.phone}</p>
-                <p><strong>Company:</strong> ${order.company || 'N/A'}</p>
-                </div>
-            
-            <div class="detail-section">
-                <h3>Delivery Address</h3>
-                <p>${order.streetAddress}</p>
-                <p>${order.city}, ${order.state} - ${order.pincode}</p>
-                <p><strong>Country:</strong> ${order.country}</p>
-                </div>
-            
-            <div class="detail-section">
-                <h3>Order Information</h3>
-                <p><strong>Product:</strong> ${order.productName}</p>
-                <p><strong>Quantity:</strong> ${order.quantity}</p>
-                <p><strong>Unit Price:</strong> ₹${order.unitPrice.toLocaleString('en-IN')}</p>
-                <p><strong>Subtotal:</strong> ₹${order.subtotal.toLocaleString('en-IN')}</p>
-                <p><strong>GST (18%):</strong> ₹${order.gst.toLocaleString('en-IN')}</p>
-                <p><strong>Total:</strong> ₹${order.total.toLocaleString('en-IN')}</p>
-                <p><strong>Payment Method:</strong> ${order.paymentMethod === 'prepaid' ? 'Prepaid' : 'Cash on Delivery'}</p>
-                </div>
-            
-            ${order.gstin ? `
-                <div class="detail-section">
-                    <h3>Business Information</h3>
-                    <p><strong>GSTIN:</strong> ${order.gstin}</p>
-                </div>
-            ` : ''}
-            
-            ${order.orderNotes ? `
-                <div class="detail-section">
-                    <h3>Order Notes</h3>
-                    <p>${order.orderNotes}</p>
-                </div>
-            ` : ''}
-                </div>
-            `;
-    
+
+    // Grouped fields for better design
+    const sections = [
+        {
+            title: 'Customer Information',
+            fields: [
+                ['First Name', order.firstName],
+                ['Last Name', order.lastName],
+                ['Email', order.email],
+                ['Phone', order.phone],
+                ['Company', order.company],
+            ]
+        },
+        {
+            title: 'Delivery Address',
+            fields: [
+                ['Country', order.country],
+                ['Street Address', order.streetAddress],
+                ['City', order.city],
+                ['State', order.state],
+                ['Pincode', order.pincode],
+            ]
+        },
+        {
+            title: 'Order Information',
+            fields: [
+                ['Product', order.productName],
+                ['Quantity', order.quantity],
+                ['Unit Price', order.unitPrice !== undefined && order.unitPrice !== null ? `₹${order.unitPrice.toLocaleString('en-IN')}` : '-'],
+                ['Subtotal', order.subtotal !== undefined && order.subtotal !== null ? `₹${order.subtotal.toLocaleString('en-IN')}` : '-'],
+                ['GST (18%)', order.gst !== undefined && order.gst !== null ? `₹${order.gst.toLocaleString('en-IN')}` : '-'],
+                ['Total', order.total !== undefined && order.total !== null ? `₹${order.total.toLocaleString('en-IN')}` : '-'],
+            ]
+        },
+        {
+            title: 'Payment & Status',
+            fields: [
+                ['Payment Method', order.paymentMethod === 'prepaid' ? 'Prepaid' : 'Cash on Delivery'],
+                ['Status', order.status || 'pending'],
+                ['Tracking ID', order.trackingId || '-'],
+            ]
+        },
+        {
+            title: 'Business Information',
+            fields: [
+                ['GSTIN', order.gstin],
+            ]
+        },
+        {
+            title: 'Order Notes',
+            fields: [
+                ['Order Notes', order.orderNotes],
+            ]
+        }
+    ];
+    let tableHTML = '<div style="overflow-x:auto;"><table style="width:100%; border-collapse:collapse; font-size:1rem; background:#fff; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">';
+    sections.forEach(section => {
+        // Only show section if it has at least one value
+        const rows = section.fields.filter(([label, value]) => value !== undefined && value !== null && value !== '').map(
+            ([label, value], idx) => `<tr style="background:${idx%2===0?'#f8f9fa':'#fff'};"><td style='font-weight:600; padding:8px 12px; width:180px;'>${label}</td><td style='padding:8px 12px;'>${value}</td></tr>`
+        ).join('');
+        if (rows) {
+            tableHTML += `<tr><td colspan="2" style="background:#e8f0fe; font-weight:700; color:#1a73e8; padding:10px 12px; border-top:1px solid #e8eaed;">${section.title}</td></tr>${rows}`;
+        }
+    });
+    tableHTML += '</table></div>';
+
+    modalBody.innerHTML = tableHTML;
     modal.style.display = 'flex';
 }
 
