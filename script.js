@@ -1224,3 +1224,17 @@ document.addEventListener('keydown', function(event) {
   });
   window.addEventListener('scroll', onScroll);
 })();
+
+// Tab switching for product details (Description, Warranty & Support)
+function openTab(tabName) {
+    // Remove active class from all tab buttons and contents
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+
+    // Add active class to the clicked tab button and its content
+    // Find the button that matches the tabName
+    const tabButton = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`openTab('${tabName}')`));
+    if (tabButton) tabButton.classList.add('active');
+    const tabContent = document.getElementById(tabName);
+    if (tabContent) tabContent.classList.add('active');
+}
