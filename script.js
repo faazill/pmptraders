@@ -114,6 +114,13 @@ async function submitWholesalerQuote(event) {
     const form = event.target;
     const formData = new FormData(form);
     
+    // Get product name from the product page
+    let productName = '';
+    const productHeader = document.querySelector('.product-header h1');
+    if (productHeader) {
+        productName = productHeader.textContent.trim();
+    }
+    
     const quoteData = {
         businessName: formData.get('businessName'),
         contactPerson: formData.get('contactPerson'),
@@ -127,6 +134,7 @@ async function submitWholesalerQuote(event) {
         nature: formData.get('nature'),
         requirement: formData.get('requirement'),
         message: formData.get('message'),
+        productName: productName,
         timestamp: firebase.database.ServerValue.TIMESTAMP,
         type: 'wholesaler_quote'
     };
@@ -438,6 +446,20 @@ async function submitForm(event) {
     }
 }
 
+// Add a global flag to track if quote modal was opened from hero section
+let quoteFromHeroSection = false;
+
+// Update hero section 'Get Quote' button to set the flag
+// (Assuming the hero section button has a unique class or id, e.g., .hero-get-quote)
+document.addEventListener('DOMContentLoaded', function() {
+    const heroGetQuoteBtn = document.querySelector('.hero-slideshow .btn-secondary');
+    if (heroGetQuoteBtn) {
+        heroGetQuoteBtn.addEventListener('click', function() {
+            quoteFromHeroSection = true;
+        });
+    }
+});
+
 // Quote Form Submission
 async function submitQuoteForm(event) {
     event.preventDefault();
@@ -493,8 +515,13 @@ async function submitQuoteForm(event) {
         submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
         submitBtn.style.background = '#34a853';
         
-        // Show success message
-        showNotification('Quote request submitted successfully! We\'ll contact you soon.', 'success');
+        // Show success message only if not from hero section
+        if (!quoteFromHeroSection) {
+            showNotification('Quote request submitted successfully! We\'ll contact you soon.', 'success');
+        }
+        
+        // Reset the flag after submission
+        quoteFromHeroSection = false;
         
         // Reset form
         form.reset();
@@ -727,8 +754,6 @@ document.querySelectorAll('.product-actions .btn').forEach(button => {
         const action = this.textContent.toLowerCase();
         if (action.includes('learn more')) {
             showNotification('Product details page coming soon!', 'info');
-        } else if (action.includes('get quote')) {
-            showNotification('Quote request sent! We\'ll contact you soon.', 'success');
         }
     });
 });
@@ -739,8 +764,6 @@ document.querySelectorAll('.slide-buttons .btn').forEach(button => {
         const action = this.textContent.toLowerCase();
         if (action.includes('learn more')) {
             showNotification('Product details page coming soon!', 'info');
-        } else if (action.includes('get quote')) {
-            showNotification('Quote request sent! We\'ll contact you soon.', 'success');
         } else if (action.includes('view catalog')) {
             showNotification('Product catalog coming soon!', 'info');
         }

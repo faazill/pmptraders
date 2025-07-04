@@ -30,7 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const gstSpan = document.getElementById('order-gst');
     const placeOrderBtn = document.getElementById('place-order-btn');
     const paymentInputs = document.querySelectorAll('.payment-method input[type="radio"]');
-    const productBasePrice = 6499;
     const gstRate = 0.18;
 
     // Coupon functionality
@@ -51,6 +50,51 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Validate quantity range
     const validQuantity = Math.max(1, Math.min(10, initialQuantity));
+
+    // Product data mapping
+    const products = {
+        'product1': {
+            name: 'AQUA 2090 RO+Alkaline Water Purifier – 10L (Premium Metallic Blue)',
+            price: 7999,
+            image: 'assets/aqua-2090-RO+Alkaline.jpeg'
+        },
+        'product2': {
+            name: 'Aqua Raga RO+Alkaline Water Purifier (Green)',
+            price: 8499,
+            image: 'assets/AQUA Raga Green.jpeg'
+        },
+        'product3': {
+            name: 'Mars RO+Alkaline Water Purifier (White + Blue)',
+            price: 7499,
+            image: 'assets/Mars White and blue.jpeg'
+        },
+        'product4': {
+            name: 'Nova Star RO Water Purifier (Without Pressure Tank)',
+            price: 7499,
+            image: 'assets/Nova Star RO under Sink without pressure Tank.jpeg'
+        },
+        'product5': {
+            name: 'Nova Star RO Water Purifier (With Pressure Tank)',
+            price: 11499,
+            image: 'assets/Nova Star RO under sink with pressure tank.jpeg'
+        }
+    };
+
+    // Get product from URL parameter
+    const urlProduct = getUrlParameter('product');
+    const selectedProduct = products[urlProduct] || products['product1'];
+
+    // Update order summary with selected product
+    const orderProductImg = document.querySelector('.order-product-img');
+    const orderProductName = document.querySelector('.order-product-name');
+    const orderProductPrice = document.querySelector('.order-product-price');
+
+    if (orderProductImg) orderProductImg.src = selectedProduct.image;
+    if (orderProductName) orderProductName.textContent = selectedProduct.name;
+    if (orderProductPrice) orderProductPrice.textContent = `₹${selectedProduct.price.toLocaleString('en-IN')}`;
+
+    // Use selected product price for calculations
+    const productBasePrice = selectedProduct.price;
 
     // Add quantity controls to order summary
     if (qtySpan) {
@@ -118,12 +162,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateSummary() {
         const qty = document.getElementById('qty-input') ? parseInt(document.getElementById('qty-input').value) : 1;
         const subtotal = qty * productBasePrice;
-        const gst = Math.round(subtotal * gstRate);
-        const total = subtotal + gst - discountAmount;
+        // GST is included in price, so do not add it
+        const total = subtotal - discountAmount;
         
         if (qtySpan) qtySpan.textContent = qty;
         if (subtotalSpan) subtotalSpan.textContent = `₹${subtotal.toLocaleString('en-IN')}`;
-        if (gstSpan) gstSpan.textContent = `₹${gst.toLocaleString('en-IN')}`;
+        // GST row is now just a message in HTML, no value to update
         if (totalSpan) totalSpan.textContent = `₹${total.toLocaleString('en-IN')}`;
         
         // Update discount display
@@ -170,8 +214,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const currentQuantity = document.getElementById('qty-input') ? parseInt(document.getElementById('qty-input').value) : validQuantity;
             const subtotal = currentQuantity * productBasePrice;
-            const gst = Math.round(subtotal * gstRate);
-            const total = subtotal + gst - discountAmount;
+            // GST is included in price, so do not add it
+            const total = subtotal - discountAmount;
             
             console.log('Payment method from radio buttons:', paymentMethod);
             console.log('Payment method type:', typeof paymentMethod);
@@ -197,19 +241,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 orderNotes: formData.get('order-notes'),
                 
                 // Order Details
-                productName: 'AQUA 2090 RO+Alkaline Water Purifier – 10L (Premium Metallic Blue)',
+                productName: selectedProduct.name,
+                productId: urlProduct,
+                productImage: selectedProduct.image,
+                productPrice: selectedProduct.price,
                 quantity: currentQuantity,
-                unitPrice: productBasePrice,
                 subtotal: subtotal,
-                gst: gst,
                 total: total,
-                discountAmount: discountAmount,
-                appliedCoupon: appliedCoupon,
-                
-                // Payment Information
+                discount: discountAmount,
                 paymentMethod: paymentMethod,
-                
-                // Timestamp
                 orderDate: new Date().toISOString(),
                 orderId: generateOrderId()
             };
