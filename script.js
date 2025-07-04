@@ -1090,3 +1090,137 @@ document.addEventListener('keydown', function(event) {
         closeQuoteModal();
     }
 });
+
+// Sticky scroll-driven product card effect for desktop (true sticky version)
+(function() {
+  const products = [
+    {
+      img: 'assets/aqua-2090-RO+Alkaline.jpeg',
+      alt: 'Aqua 2090 (White + Blue)',
+      name: 'Aqua 2090 (White + Blue)',
+      desc: 'Advanced RO + Alkaline water purifier with 8-stage filtration system',
+      type: 'RO + Alkaline',
+      qty: 'Available: 10 units',
+      price: '₹7,999',
+      original: '₹9,999',
+      buy: 'productpages/product1.html',
+      quote: 'productpages/product1.html'
+    },
+    {
+      img: 'assets/AQUA Raga Green.jpeg',
+      alt: 'Aqua Raga (Each 1 Colour)',
+      name: 'Aqua Raga',
+      desc: 'Compact RO + Alkaline purifier with smart LED indicators',
+      type: 'RO + Alkaline',
+      qty: 'Available: 5 units',
+      price: '₹8,499',
+      original: '₹10,499',
+      buy: 'productpages/product2.html',
+      quote: 'productpages/product2.html'
+    },
+    {
+      img: 'assets/Mars White and blue.jpeg',
+      alt: 'Mars (White + Blue)',
+      name: 'Mars (White + Blue)',
+      desc: 'Premium RO + Alkaline system with UV sterilization technology',
+      type: 'RO + Alkaline',
+      qty: 'Available: 5 units',
+      price: '₹7,499',
+      original: '₹9,499',
+      buy: 'productpages/product3.html',
+      quote: 'productpages/product3.html'
+    },
+    {
+      img: 'assets/Nova Star RO under Sink without pressure Tank.jpeg',
+      alt: 'Nova Star',
+      name: 'Nova Star Without Pressure Tank',
+      desc: 'Space-saving under-sink RO system with 6-stage filtration',
+      type: 'RO',
+      qty: 'Available: 3 units',
+      price: '₹7,499',
+      original: '₹8,999',
+      buy: 'productpages/product4.html',
+      quote: 'productpages/product4.html'
+    },
+    {
+      img: 'assets/Nova Star RO under sink with pressure tank.jpeg',
+      alt: 'Nova Star with Pressure Tank',
+      name: 'Nova Star with Pressure Tank',
+      desc: 'Under-sink RO system with pressure tank for continuous water supply',
+      type: 'RO',
+      qty: 'Available: 2 units',
+      price: '₹11,499',
+      original: '₹13,999',
+      buy: 'productpages/product5.html',
+      quote: 'productpages/product5.html'
+    }
+  ];
+
+  function isDesktop() {
+    return window.innerWidth >= 769;
+  }
+  var wrapper = document.querySelector('.products-scroll-wrapper');
+  var stickyCard = document.querySelector('.sticky-product-card');
+  if (!wrapper || !stickyCard) return;
+
+  function renderProduct(index) {
+    const p = products[index];
+    stickyCard.style.opacity = 0;
+    setTimeout(() => {
+      stickyCard.innerHTML = `
+        <div class="product-card featured">
+          <div class="product-gallery">
+            <div class="main-image">
+              <img src="${p.img}" alt="${p.alt}">
+            </div>
+          </div>
+          <div class="product-content">
+            <h3>${p.name}</h3>
+            <p class="product-description">${p.desc}</p>
+            <div class="product-type">Type: ${p.type}</div>
+            <div class="product-quantity">${p.qty}</div>
+            <div class="product-price">
+              <span class="current-price">${p.price}</span>
+              <span class="original-price">${p.original}</span>
+            </div>
+            <div class="product-actions">
+              <a href="${p.buy}" class="btn btn-primary btn-buy-now">Buy Now</a>
+              <a href="${p.quote}" class="btn btn-secondary btn-quote">Get Quote</a>
+            </div>
+          </div>
+        </div>
+      `;
+      stickyCard.style.opacity = 1;
+    }, 200);
+  }
+
+  function setWrapperHeight() {
+    if (!isDesktop()) {
+      stickyCard.style.display = 'none';
+      return;
+    }
+    stickyCard.style.display = 'block';
+    var vh = window.innerHeight;
+    wrapper.style.height = (vh * products.length) + 'px';
+  }
+
+  function onScroll() {
+    if (!isDesktop()) return;
+    var vh = window.innerHeight;
+    var scrollY = window.scrollY || window.pageYOffset;
+    var wrapperTop = wrapper.offsetTop;
+    var index = Math.floor((scrollY - wrapperTop + vh/2) / vh);
+    index = Math.max(0, Math.min(products.length - 1, index));
+    renderProduct(index);
+  }
+
+  setWrapperHeight();
+  renderProduct(0);
+  onScroll();
+
+  window.addEventListener('resize', function() {
+    setWrapperHeight();
+    onScroll();
+  });
+  window.addEventListener('scroll', onScroll);
+})();
