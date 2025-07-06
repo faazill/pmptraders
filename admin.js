@@ -15,7 +15,7 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
 // Global variables
-let currentOrderType = 'prepaid';
+let currentOrderType = 'cod';
 let currentOrderKey = null;
 let currentOrderData = null;
 
@@ -311,17 +311,33 @@ function displayContacts(contacts) {
     
     if (contacts.length === 0) {
         tableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem;">No contact forms found</td></tr>';
-            return;
+        return;
+    }
+    
+    tableBody.innerHTML = contacts.map(contact => {
+        // Handle date formatting with error handling
+        let formattedDate = '-';
+        try {
+            const dateValue = contact.timestamp || contact.date;
+            if (dateValue) {
+                const date = new Date(dateValue);
+                if (!isNaN(date.getTime())) {
+                    formattedDate = date.toLocaleDateString('en-IN');
+                }
+            }
+        } catch (error) {
+            console.error('Error formatting date:', error);
+            formattedDate = '-';
         }
         
-    tableBody.innerHTML = contacts.map(contact => `
+        return `
         <tr>
-            <td>${new Date(contact.date).toLocaleDateString('en-IN')}</td>
-            <td>${contact.name}</td>
-            <td>${contact.email}</td>
-            <td>${contact.phone}</td>
-            <td>${contact.subject}</td>
-            <td>${contact.message.substring(0, 50)}${contact.message.length > 50 ? '...' : ''}</td>
+            <td>${formattedDate}</td>
+            <td>${contact.name || '-'}</td>
+            <td>${contact.email || '-'}</td>
+            <td>${contact.phone || '-'}</td>
+            <td>${contact.subject || '-'}</td>
+            <td>${contact.message ? (contact.message.substring(0, 50) + (contact.message.length > 50 ? '...' : '')) : '-'}</td>
             <td>
                 <button class="btn btn-sm btn-primary" onclick="viewContact('${contact.key}')">
                     <i class="fas fa-eye"></i> View
@@ -331,7 +347,7 @@ function displayContacts(contacts) {
                 </button>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
 }
 
 function viewContact(contactKey) {
@@ -348,6 +364,22 @@ function viewContact(contactKey) {
 function displayContactModal(contact) {
     const modal = document.getElementById('contactModal');
     const modalBody = document.getElementById('contactModalBody');
+    
+    // Handle date formatting with error handling
+    let formattedDate = '-';
+    try {
+        const dateValue = contact.timestamp || contact.date;
+        if (dateValue) {
+            const date = new Date(dateValue);
+            if (!isNaN(date.getTime())) {
+                formattedDate = date.toLocaleString('en-IN');
+            }
+        }
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        formattedDate = '-';
+    }
+    
     modalBody.innerHTML = `
         <div class="contact-details-modal">
             <h3>Contact Information</h3>
@@ -356,7 +388,7 @@ function displayContactModal(contact) {
                 <dt>Email</dt><dd>${contact.email || '-'}</dd>
                 <dt>Subject</dt><dd>${contact.subject || '-'}</dd>
                 <dt>Message</dt><dd>${contact.message || '-'}</dd>
-                <dt>Date</dt><dd>${contact.timestamp ? new Date(contact.timestamp).toLocaleString('en-IN') : '-'}</dd>
+                <dt>Date</dt><dd>${formattedDate}</dd>
             </dl>
         </div>
     `;
@@ -420,15 +452,31 @@ function displayWholesaleQuotes(quotes) {
         return;
     }
     
-    tableBody.innerHTML = quotes.map(quote => `
+    tableBody.innerHTML = quotes.map(quote => {
+        // Handle date formatting with error handling
+        let formattedDate = '-';
+        try {
+            const dateValue = quote.timestamp || quote.date;
+            if (dateValue) {
+                const date = new Date(dateValue);
+                if (!isNaN(date.getTime())) {
+                    formattedDate = date.toLocaleDateString('en-IN');
+                }
+            }
+        } catch (error) {
+            console.error('Error formatting date:', error);
+            formattedDate = '-';
+        }
+        
+        return `
         <tr>
-            <td>${new Date(quote.date).toLocaleDateString('en-IN')}</td>
-            <td>${quote.businessName}</td>
-            <td>${quote.contactPerson}</td>
-            <td>${quote.email}</td>
-            <td>${quote.mobile}</td>
+            <td>${formattedDate}</td>
+            <td>${quote.businessName || '-'}</td>
+            <td>${quote.contactPerson || '-'}</td>
+            <td>${quote.email || '-'}</td>
+            <td>${quote.mobile || '-'}</td>
             <td>${quote.gst || 'N/A'}</td>
-            <td>${quote.address.substring(0, 30)}${quote.address.length > 30 ? '...' : ''}</td>
+            <td>${quote.address ? (quote.address.substring(0, 30) + (quote.address.length > 30 ? '...' : '')) : '-'}</td>
             <td>
                 <button class="btn btn-sm btn-primary" onclick="viewWholesale('${quote.key}')">
                     <i class="fas fa-eye"></i> View
@@ -438,7 +486,7 @@ function displayWholesaleQuotes(quotes) {
                 </button>
             </td>
         </tr>
-    `).join('');
+    `}).join('');
 }
 
 function viewWholesale(quoteKey) {
@@ -456,6 +504,22 @@ function viewWholesale(quoteKey) {
 function displayWholesaleModal(quote) {
     const modal = document.getElementById('wholesaleModal');
     const modalBody = document.getElementById('wholesaleModalBody');
+    
+    // Handle date formatting with error handling
+    let formattedDate = '-';
+    try {
+        const dateValue = quote.timestamp || quote.date;
+        if (dateValue) {
+            const date = new Date(dateValue);
+            if (!isNaN(date.getTime())) {
+                formattedDate = date.toLocaleString('en-IN');
+            }
+        }
+    } catch (error) {
+        console.error('Error formatting date:', error);
+        formattedDate = '-';
+    }
+    
     modalBody.innerHTML = `
         <div class="wholesale-details-modal">
             <h3>Business Information</h3>
@@ -472,7 +536,7 @@ function displayWholesaleModal(quote) {
                 <dt>Nature of Business</dt><dd>${quote.nature || '-'}</dd>
                 <dt>Requirement</dt><dd>${quote.requirement || '-'}</dd>
                 <dt>Message/Comments</dt><dd>${quote.message || '-'}</dd>
-                <dt>Date</dt><dd>${quote.timestamp ? new Date(quote.timestamp).toLocaleString('en-IN') : '-'}</dd>
+                <dt>Date</dt><dd>${formattedDate}</dd>
             </dl>
         </div>
     `;

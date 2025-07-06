@@ -444,36 +444,287 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function showOrderConfirmation(orderId) {
+        // Get form data for delivery address
+        const formData = new FormData(checkoutForm);
+        const deliveryAddress = {
+            street: formData.get('streetAddress') || '',
+            city: formData.get('city') || '',
+            state: formData.get('state') || '',
+            pincode: formData.get('pincode') || ''
+        };
+
         const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = 0;
-        overlay.style.left = 0;
-        overlay.style.width = '100vw';
-        overlay.style.height = '100vh';
-        overlay.style.background = 'rgba(32, 33, 36, 0.6)';
-        overlay.style.display = 'flex';
-        overlay.style.alignItems = 'center';
-        overlay.style.justifyContent = 'center';
-        overlay.style.zIndex = 9999;
+        overlay.className = 'order-confirmation-overlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, rgba(26, 115, 232, 0.95) 0%, rgba(66, 133, 244, 0.95) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        `;
+
         overlay.innerHTML = `
-            <div style="background:#fff;padding:2rem;border-radius:8px;border:1px solid #dadce0;text-align:center;max-width:400px;margin:1rem;">
-                <div style="font-size:2rem;color:#34a853;margin-bottom:1rem;"><i class='fas fa-check-circle'></i></div>
-                <h2 style="margin:0 0 0.5rem 0;font-size:1.125rem;font-weight:500;color:#202124;font-family:'Google Sans',sans-serif;">Order Confirmed!</h2>
-                <p style="color:#5f6368;font-size:0.875rem;margin:0 0 0.5rem 0;font-family:'Google Sans',sans-serif;">Thank you for your order. We'll contact you soon.</p>
-                <p style="color:#1a73e8;font-size:0.75rem;font-weight:600;margin:0;font-family:'Google Sans',sans-serif;">Order ID: ${orderId}</p>
-                <button class="btn btn-secondary" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s;" onclick="window.location.href='productpages/product1.html'">Continue Shopping</button>
+            <div class="confirmation-card" style="
+                background: #ffffff;
+                border-radius: 24px;
+                padding: 3rem 2rem;
+                text-align: center;
+                max-width: 500px;
+                margin: 1rem;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+                transform: translateY(30px) scale(0.9);
+                animation: slideUp 0.6s ease-out 0.2s forwards;
+                position: relative;
+                overflow: hidden;
+            ">
+                <!-- Success Icon with Animation -->
+                <div class="success-icon" style="
+                    width: 80px;
+                    height: 80px;
+                    background: linear-gradient(135deg, #34a853, #0f9d58);
+                    border-radius: 50%;
+                    margin: 0 auto 2rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 2.5rem;
+                    color: white;
+                    animation: bounceIn 0.8s ease-out 0.4s both;
+                    position: relative;
+                ">
+                    <i class="fas fa-check" style="animation: checkmark 0.6s ease-out 1s both;"></i>
+                </div>
+
+                <!-- Order Confirmed Title -->
+                <h1 style="
+                    font-size: 2rem;
+                    font-weight: 600;
+                    color: #202124;
+                    margin: 0 0 1rem 0;
+                    font-family: 'Google Sans', sans-serif;
+                    animation: fadeInUp 0.6s ease-out 0.6s both;
+                ">Order Confirmed!</h1>
+
+                <!-- Order ID -->
+                <p style="
+                    color: #1a73e8;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    margin: 0 0 2rem 0;
+                    font-family: 'Google Sans', sans-serif;
+                    animation: fadeInUp 0.6s ease-out 0.8s both;
+                ">Order ID: ${orderId}</p>
+
+                <!-- Delivery Information -->
+                <div class="delivery-info" style="
+                    background: #f8f9fa;
+                    border-radius: 16px;
+                    padding: 1.5rem;
+                    margin: 0 0 2rem 0;
+                    border-left: 4px solid #34a853;
+                    animation: fadeInUp 0.6s ease-out 1s both;
+                ">
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        gap: 0.5rem;
+                        margin-bottom: 1rem;
+                        color: #34a853;
+                        font-weight: 600;
+                        font-size: 1.1rem;
+                    ">
+                        <i class="fas fa-truck" style="font-size: 1.2rem;"></i>
+                        <span>Delivery Information</span>
+                    </div>
+                    
+                    <p style="
+                        color: #5f6368;
+                        font-size: 0.95rem;
+                        margin: 0 0 0.5rem 0;
+                        font-weight: 500;
+                    ">Your order will be delivered in <strong style="color: #1a73e8;">3-5 business days</strong></p>
+                    
+                    <div style="
+                        background: #e8f0fe;
+                        border-radius: 8px;
+                        padding: 1rem;
+                        margin-top: 1rem;
+                        text-align: left;
+                    ">
+                        <p style="
+                            color: #1a73e8;
+                            font-weight: 600;
+                            margin: 0 0 0.5rem 0;
+                            font-size: 0.9rem;
+                        ">Delivery Address:</p>
+                        <p style="
+                            color: #5f6368;
+                            margin: 0;
+                            font-size: 0.85rem;
+                            line-height: 1.4;
+                        ">
+                            ${deliveryAddress.street}<br>
+                            ${deliveryAddress.city}, ${deliveryAddress.state} ${deliveryAddress.pincode}
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Continue Shopping Button -->
+                <button class="continue-shopping-btn" style="
+                    background: linear-gradient(135deg, #1a73e8, #4285f4);
+                    color: white;
+                    border: none;
+                    padding: 1rem 2rem;
+                    border-radius: 12px;
+                    font-size: 1rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-family: 'Google Sans', sans-serif;
+                    transition: all 0.3s ease;
+                    animation: fadeInUp 0.6s ease-out 1.2s both;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 0.5rem;
+                    margin: 0 auto;
+                    min-width: 200px;
+                " onclick="window.location.href='index.html'">
+                    <i class="fas fa-shopping-bag"></i>
+                    Continue Shopping
+                </button>
+
+                <!-- Decorative Elements -->
+                <div style="
+                    position: absolute;
+                    top: -20px;
+                    right: -20px;
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, rgba(52, 168, 83, 0.1), rgba(15, 157, 88, 0.1));
+                    border-radius: 50%;
+                    animation: float 3s ease-in-out infinite;
+                "></div>
+                <div style="
+                    position: absolute;
+                    bottom: -15px;
+                    left: -15px;
+                    width: 40px;
+                    height: 40px;
+                    background: linear-gradient(135deg, rgba(26, 115, 232, 0.1), rgba(66, 133, 244, 0.1));
+                    border-radius: 50%;
+                    animation: float 3s ease-in-out infinite reverse;
+                "></div>
             </div>
         `;
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideUp {
+                from { 
+                    transform: translateY(30px) scale(0.9);
+                    opacity: 0;
+                }
+                to { 
+                    transform: translateY(0) scale(1);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes bounceIn {
+                0% {
+                    transform: scale(0);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.2);
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes checkmark {
+                0% {
+                    transform: scale(0) rotate(-45deg);
+                    opacity: 0;
+                }
+                50% {
+                    transform: scale(1.2) rotate(-45deg);
+                }
+                100% {
+                    transform: scale(1) rotate(0deg);
+                    opacity: 1;
+                }
+            }
+            
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            @keyframes float {
+                0%, 100% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+            
+            .continue-shopping-btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(26, 115, 232, 0.3);
+            }
+            
+            .continue-shopping-btn:active {
+                transform: translateY(0);
+            }
+        `;
+        document.head.appendChild(style);
+
         document.body.appendChild(overlay);
 
-        // Add hover effect to close button
-        const closeBtn = overlay.querySelector('button');
-        closeBtn.onmouseenter = function() {
-            this.style.background = '#1557b0';
-        };
-        closeBtn.onmouseleave = function() {
-            this.style.background = '#1a73e8';
-        };
+        // Add hover effects
+        const continueBtn = overlay.querySelector('.continue-shopping-btn');
+        continueBtn.addEventListener('mouseenter', function() {
+            this.style.background = 'linear-gradient(135deg, #1557b0, #1a73e8)';
+        });
+        continueBtn.addEventListener('mouseleave', function() {
+            this.style.background = 'linear-gradient(135deg, #1a73e8, #4285f4)';
+        });
+
+        // Close on overlay click (optional)
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                overlay.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                }, 300);
+            }
+        });
     }
 
     function showErrorNotification(message) {
