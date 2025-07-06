@@ -286,9 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Razorpay configuration
         const options = {
-            xc: 'gLK77rrv40437',
-            vb: 'HsQ4DBt21hN',
-            key: xc + vb, // Use the test key constant
+            key: RAZORPAY_KEY_ID, // Use the test key constant
             amount: orderData.total * 100, // Amount in paise
             currency: 'INR',
             name: 'Aquavalor',
