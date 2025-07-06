@@ -37,11 +37,7 @@
             <!-- Order Management Tab -->
             <div id="orders-tab" class="tab-content active">
                 <div class="order-tabs">
-                    <button class="order-tab-btn active" data-order-type="prepaid" onclick="switchOrderTab('prepaid')">
-                        <i class="fas fa-credit-card"></i>
-                        Prepaid Orders
-                    </button>
-                    <button class="order-tab-btn" data-order-type="cod" onclick="switchOrderTab('cod')">
+                    <button class="order-tab-btn active" data-order-type="cod" onclick="switchOrderTab('cod')">
                         <i class="fas fa-money-bill-wave"></i>
                         COD Orders
                     </button>
@@ -49,7 +45,7 @@
 
                 <div class="table-container">
                     <div class="table-header">
-                        <h2 id="orderTableTitle">Prepaid Orders</h2>
+                        <h2 id="orderTableTitle">COD Orders</h2>
                         <button class="btn btn-primary" onclick="refreshOrderData()">
                             <i class="fas fa-sync-alt"></i>
                             Refresh

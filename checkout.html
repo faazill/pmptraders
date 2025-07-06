@@ -20,7 +20,32 @@
         </a>
     </div>
     
-    <main class="container checkout-flex">
+    <!-- Payment Method Selection Section -->
+    <div class="payment-selection-section aquaultra-style" id="payment-selection-section">
+        <h2>Choose Payment Method</h2>
+        <div class="payment-methods-row">
+            <label class="payment-method-card">
+                <input type="radio" name="initial-payment" value="cod" id="cod-option">
+                <div class="payment-method-content">
+                    <span class="payment-icon"><i class="fas fa-money-bill-wave"></i></span>
+                    <span class="payment-text">Cash on Delivery</span>
+                </div>
+            </label>
+            <label class="payment-method-card">
+                <input type="radio" name="initial-payment" value="prepaid" id="prepaid-option">
+                <div class="payment-method-content">
+                    <span class="payment-icon"><i class="fas fa-credit-card"></i></span>
+                    <span class="payment-text">Prepaid</span>
+                </div>
+            </label>
+        </div>
+        <button type="button" class="btn btn-primary btn-large aquaultra-btn" id="next-btn" disabled>
+            Next
+        </button>
+    </div>
+    
+    <!-- Main Checkout Form (initially hidden) -->
+    <main class="container checkout-flex" id="checkout-main" style="display: none;">
         <div class="checkout-form-section aquaultra-style">
             <form id="checkout-form">
                 <div class="form-row">
@@ -169,28 +194,36 @@
                         </div>
                     </label>
                 </div>
-                
-                <!-- Razorpay Payment Button Container -->
-                <div id="razorpay-payment-container" class="razorpay-payment-container" style="display: none; margin-top: 1rem;">
-                    <div class="payment-button-wrapper">
-                        <form id="razorpay-payment-form">
-                            <script src="https://checkout.razorpay.com/v1/payment-button.js" 
-                                    data-payment_button_id="pl_QpnMEgCSwwTW0l" 
-                                    data-prefill[name]=""
-                                    data-prefill[email]=""
-                                    data-prefill[contact]=""
-                                    data-theme[color]="#1a73e8"
-                                    data-callback="razorpayPaymentSuccess"
-                                    async>
-                            </script>
-                        </form>
-                    </div>
-                </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-large aquaultra-btn" id="place-order-btn" form="checkout-form">
+            <!-- Regular Place Order Button (shown only for COD) -->
+            <button type="submit" class="btn btn-primary btn-large aquaultra-btn" id="place-order-btn" form="checkout-form" style="display: none;">
                 <i class="fas fa-shopping-cart"></i>
                 Place Order
             </button>
+        </div>
+        
+        <!-- Razorpay Payment Button (moved outside order summary, shown only for prepaid) -->
+        <div id="razorpay-section" style="display: none;">
+            <!-- Aqua 2090 (White + Blue) -->
+            <div id="razorpay-product1" class="razorpay-button" style="display: none;">
+                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qpo7dl4ymeNT66" async> </script> </form>
+            </div>
+            <!-- Aqua Raga -->
+            <div id="razorpay-product2" class="razorpay-button" style="display: none;">
+                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qpo8gL4lnGTf8B" async> </script> </form>
+            </div>
+            <!-- Mars (White + Blue) -->
+            <div id="razorpay-product3" class="razorpay-button" style="display: none;">
+                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qpo9ONiTHGk7YY" async> </script> </form>
+            </div>
+            <!-- Nova Star Without Pressure Tank -->
+            <div id="razorpay-product4" class="razorpay-button" style="display: none;">
+                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qpo9phr53p7tAA" async> </script> </form>
+            </div>
+            <!-- Nova Star With Pressure Tank -->
+            <div id="razorpay-product5" class="razorpay-button" style="display: none;">
+                <form><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_Qpo9rbOCnXcLZ3" async> </script> </form>
+            </div>
         </div>
     </main>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -198,6 +231,128 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="checkout.js"></script>
     <script>
+    // Payment method selection logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const codOption = document.getElementById('cod-option');
+        const prepaidOption = document.getElementById('prepaid-option');
+        const nextBtn = document.getElementById('next-btn');
+        const paymentSelectionSection = document.getElementById('payment-selection-section');
+        const checkoutMain = document.getElementById('checkout-main');
+        const razorpaySection = document.getElementById('razorpay-section');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const paymentRadios = document.querySelectorAll('input[name="payment"]');
+
+        // Enable/disable next button based on selection
+        function updateNextButton() {
+            nextBtn.disabled = !(codOption.checked || prepaidOption.checked);
+        }
+
+        // Handle payment method selection
+        codOption.addEventListener('change', updateNextButton);
+        prepaidOption.addEventListener('change', updateNextButton);
+
+        // Handle next button click
+        nextBtn.addEventListener('click', function() {
+            const selectedMethod = codOption.checked ? 'cod' : 'prepaid';
+            
+            // Hide payment selection section
+            paymentSelectionSection.style.display = 'none';
+            
+            // Show checkout main section
+            checkoutMain.style.display = 'flex';
+            
+            // Set the payment method in the checkout form and control visibility
+            if (selectedMethod === 'cod') {
+                // For COD: Show full checkout form with place order button
+                document.querySelector('input[name="payment"][value="cod"]').checked = true;
+                document.querySelector('.checkout-form-section').style.display = 'block';
+                document.querySelector('.checkout-summary-section').style.display = 'block';
+                placeOrderBtn.style.display = 'block';
+                razorpaySection.style.display = 'none';
+                console.log('COD selected: Showing full checkout form with place order button');
+            } else {
+                // For prepaid: Hide checkout form and order summary, show only Razorpay
+                document.querySelector('input[name="payment"][value="prepaid"]').checked = true;
+                document.querySelector('.checkout-form-section').style.display = 'none';
+                document.querySelector('.checkout-summary-section').style.display = 'none';
+                placeOrderBtn.style.display = 'none';
+                razorpaySection.style.display = 'block';
+                
+                // Show the correct Razorpay button based on selected product
+                showCorrectRazorpayButton();
+                console.log('Prepaid selected: Hiding checkout form and order summary, showing only Razorpay');
+            }
+        });
+
+        // Handle payment method changes in checkout form
+        paymentRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === 'cod') {
+                    // For COD: Show full checkout form with place order button
+                    document.querySelector('.checkout-form-section').style.display = 'block';
+                    document.querySelector('.checkout-summary-section').style.display = 'block';
+                    placeOrderBtn.style.display = 'block';
+                    razorpaySection.style.display = 'none';
+                    console.log('Payment method changed to COD: Showing full checkout form with place order button');
+                } else {
+                    // For prepaid: Hide checkout form and order summary, show only Razorpay
+                    document.querySelector('.checkout-form-section').style.display = 'none';
+                    document.querySelector('.checkout-summary-section').style.display = 'none';
+                    placeOrderBtn.style.display = 'none';
+                    razorpaySection.style.display = 'block';
+                    
+                    // Show the correct Razorpay button based on selected product
+                    showCorrectRazorpayButton();
+                    console.log('Payment method changed to prepaid: Hiding checkout form and order summary, showing only Razorpay');
+                }
+            });
+        });
+
+        // Function to show the correct Razorpay button based on selected product
+        function showCorrectRazorpayButton() {
+            // Hide all Razorpay buttons first
+            document.querySelectorAll('.razorpay-button').forEach(button => {
+                button.style.display = 'none';
+            });
+            
+            // Get the selected product from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const product = urlParams.get('product') || 'product1';
+            
+            // Show the correct Razorpay button
+            const correctButton = document.getElementById(`razorpay-${product}`);
+            if (correctButton) {
+                correctButton.style.display = 'block';
+                console.log(`Showing Razorpay button for ${product}`);
+            } else {
+                console.log(`No Razorpay button found for ${product}, showing default`);
+                document.getElementById('razorpay-product1').style.display = 'block';
+            }
+        }
+
+        // Ensure initial state is correct when page loads
+        function initializePaymentMethodDisplay() {
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (selectedPayment) {
+                if (selectedPayment.value === 'cod') {
+                    document.querySelector('.checkout-form-section').style.display = 'block';
+                    document.querySelector('.checkout-summary-section').style.display = 'block';
+                    placeOrderBtn.style.display = 'block';
+                    razorpaySection.style.display = 'none';
+                } else {
+                    document.querySelector('.checkout-form-section').style.display = 'none';
+                    document.querySelector('.checkout-summary-section').style.display = 'none';
+                    placeOrderBtn.style.display = 'none';
+                    razorpaySection.style.display = 'block';
+                    showCorrectRazorpayButton();
+                }
+            }
+        }
+
+        // Call initialization after a short delay to ensure DOM is ready
+        setTimeout(initializePaymentMethodDisplay, 100);
+    });
+
     // Dynamically set the back button link based on the product parameter
     document.addEventListener('DOMContentLoaded', function() {
         const backBtn = document.getElementById('back-btn');
@@ -253,24 +408,6 @@
         document.getElementById('order-product-price').textContent = `₹${selectedProduct.price.toLocaleString('en-IN')}`;
         details.style.display = '';
     });
-
-    // Handle Razorpay payment button callback
-    window.addEventListener('message', function(event) {
-        if (event.data && event.data.type === 'razorpay_payment_success') {
-            // Call our global function to handle payment success
-            if (window.handleRazorpayPaymentSuccess) {
-                window.handleRazorpayPaymentSuccess(event.data.response);
-            }
-        }
-    });
-
-    // Alternative callback method for Razorpay payment button
-    window.razorpayPaymentSuccess = function(response) {
-        console.log('Razorpay payment button success callback:', response);
-        if (window.handleRazorpayPaymentSuccess) {
-            window.handleRazorpayPaymentSuccess(response);
-        }
-    };
     </script>
 </body>
 </html> 

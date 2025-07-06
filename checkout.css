@@ -985,59 +985,141 @@ h2 {
     margin-bottom: 1rem;
 }
 
-/* Razorpay Payment Button Container */
-.razorpay-payment-container {
+/* Payment Selection Section */
+.payment-selection-section {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.payment-selection-section h2 {
+    margin-bottom: 1.5rem;
+    color: #202124;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+.payment-selection-section .payment-methods-row {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.payment-selection-section .payment-method-card {
+    flex: 1;
+    max-width: 200px;
+    cursor: pointer;
+    border: 2px solid #dadce0;
+    border-radius: 8px;
+    padding: 1.5rem 1rem;
+    transition: all 0.2s ease;
+    background: #fff;
+}
+
+.payment-selection-section .payment-method-card:hover {
+    border-color: #1a73e8;
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.15);
+}
+
+.payment-selection-section .payment-method-card input[type="radio"] {
+    display: none;
+}
+
+.payment-selection-section .payment-method-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.payment-selection-section .payment-icon {
+    font-size: 2rem;
+    color: #5f6368;
+    transition: color 0.2s ease;
+}
+
+.payment-selection-section .payment-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #202124;
+    font-family: 'Google Sans', sans-serif;
+}
+
+.payment-selection-section .payment-method-card input[type="radio"]:checked + .payment-method-content {
+    color: #1a73e8;
+}
+
+.payment-selection-section .payment-method-card input[type="radio"]:checked + .payment-method-content .payment-icon {
+    color: #1a73e8;
+}
+
+.payment-selection-section .payment-method-card input[type="radio"]:checked + .payment-method-content .payment-text {
+    color: #1a73e8;
+}
+
+.payment-selection-section .payment-method-card input[type="radio"]:checked {
+    border-color: #1a73e8;
+    background: #e8f0fe;
+}
+
+.payment-selection-section .btn {
+    min-width: 120px;
+    font-size: 1rem;
+    padding: 0.875rem 2rem;
+}
+
+.payment-selection-section .btn:disabled {
+    background: #dadce0;
+    color: #5f6368;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.payment-selection-section .btn:disabled:hover {
+    background: #dadce0;
+    color: #5f6368;
+    transform: none;
+}
+
+/* Razorpay Section */
+#razorpay-section {
     margin-top: 1rem;
     padding: 1rem;
     background: #f8f9fa;
-    border: 1px solid #dadce0;
     border-radius: 8px;
-    transition: all 0.2s ease;
+    border: 1px solid #dadce0;
 }
 
-.razorpay-payment-container:hover {
-    border-color: #1a73e8;
-    background: #f0f8ff;
-}
-
-.payment-button-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 50px;
-}
-
-.payment-button-wrapper form {
-    width: 100%;
+#razorpay-section form {
     display: flex;
     justify-content: center;
 }
 
-/* Ensure Razorpay button styling is consistent */
-.razorpay-payment-container .razorpay-payment-button {
-    background: #1a73e8 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 12px 24px !important;
-    font-family: 'Google Sans', sans-serif !important;
-    font-weight: 500 !important;
-    font-size: 14px !important;
-    cursor: pointer !important;
-    transition: background-color 0.2s ease !important;
-}
-
-.razorpay-payment-container .razorpay-payment-button:hover {
-    background: #1557b0 !important;
-}
-
-/* Responsive design for payment button */
+/* Responsive Design for Payment Selection */
 @media (max-width: 600px) {
-    .razorpay-payment-container {
-        padding: 0.75rem;
+    .payment-selection-section {
+        margin: 1rem;
+        padding: 1.5rem;
     }
     
-    .payment-button-wrapper {
-        min-height: 40px;
+    .payment-selection-section .payment-methods-row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .payment-selection-section .payment-method-card {
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .payment-selection-section h2 {
+        font-size: 1.25rem;
     }
 } 
