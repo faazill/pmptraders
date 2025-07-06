@@ -215,9 +215,47 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
     <script>
-        // Page is now simplified - no order details to populate
-        console.log('Order placed successfully!');
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA8G4a8Hlxd_B73OCUETboBB0nT7SBOSDo",
+            authDomain: "aquavalor-c8e59.firebaseapp.com",
+            databaseURL: "https://aquavalor-c8e59-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "aquavalor-c8e59",
+            storageBucket: "aquavalor-c8e59.firebasestorage.app",
+            messagingSenderId: "923902120858",
+            appId: "1:923902120858:web:d516a29f32e2c61bed6023",
+            measurementId: "G-TY5VK0M9YQ"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Store order data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get order data from localStorage (set by checkout page)
+            const orderDataStr = localStorage.getItem('latestPrepaidOrder');
+            if (orderDataStr) {
+                const orderData = JSON.parse(orderDataStr);
+                
+                // Store in Firebase under prepaid_orders
+                database.ref('prepaid_orders').push(orderData)
+                    .then(() => {
+                        console.log('Order saved to Firebase successfully!');
+                        console.log('Order data:', orderData);
+                        // Clear localStorage after successful save
+                        localStorage.removeItem('latestPrepaidOrder');
+                    })
+                    .catch((error) => {
+                        console.error('Error saving order to Firebase:', error);
+                    });
+            } else {
+                console.log('No order data found in localStorage');
+            }
+        });
     </script>
 </body>
 </html> 

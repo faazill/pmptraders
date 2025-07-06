@@ -325,6 +325,10 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Razorpay options:', options);
 
         try {
+            // Store order data in localStorage before payment
+            localStorage.setItem('latestPrepaidOrder', JSON.stringify(orderData));
+            console.log('Order data stored in localStorage:', orderData);
+            
             // Create Razorpay instance
             const rzp = new Razorpay(options);
             console.log('Razorpay instance created:', rzp);
