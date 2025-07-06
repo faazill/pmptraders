@@ -11,23 +11,6 @@
     <link rel="stylesheet" href="checkout.css">
     <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        #razorpay-button-container {
-            width: 100%;
-        }
-        #razorpay-button-container form {
-            width: 100%;
-        }
-        #razorpay-button-container iframe {
-            width: 100% !important;
-            min-width: 100% !important;
-        }
-        /* Target Razorpay button specifically */
-        #razorpay-button-container .razorpay-payment-button {
-            width: 100% !important;
-            min-width: 100% !important;
-        }
-    </style>
 </head>
 <body>
     <div class="back-section">
@@ -186,14 +169,28 @@
                         </div>
                     </label>
                 </div>
+                
+                <!-- Razorpay Payment Button Container -->
+                <div id="razorpay-payment-container" class="razorpay-payment-container" style="display: none; margin-top: 1rem;">
+                    <div class="payment-button-wrapper">
+                        <form id="razorpay-payment-form">
+                            <script src="https://checkout.razorpay.com/v1/payment-button.js" 
+                                    data-payment_button_id="pl_QpnMEgCSwwTW0l" 
+                                    data-prefill[name]=""
+                                    data-prefill[email]=""
+                                    data-prefill[contact]=""
+                                    data-theme[color]="#1a73e8"
+                                    data-callback="razorpayPaymentSuccess"
+                                    async>
+                            </script>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-large aquaultra-btn" id="place-order-btn" form="checkout-form" style="display: none;">
+            <button type="submit" class="btn btn-primary btn-large aquaultra-btn" id="place-order-btn" form="checkout-form">
                 <i class="fas fa-shopping-cart"></i>
                 Place Order
             </button>
-            <div id="razorpay-button-container" style="display: block; width: 100%;">
-                <form style="width: 100%;"><script src="https://checkout.razorpay.com/v1/payment-button.js" data-payment_button_id="pl_QpnMEgCSwwTW0l" async> </script> </form>
-            </div>
         </div>
     </main>
     <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
@@ -257,32 +254,23 @@
         details.style.display = '';
     });
 
-    // Handle payment method selection
-    document.addEventListener('DOMContentLoaded', function() {
-        const paymentRadios = document.querySelectorAll('input[name="payment"]');
-        const placeOrderBtn = document.getElementById('place-order-btn');
-        const razorpayContainer = document.getElementById('razorpay-button-container');
-
-        function togglePaymentButtons() {
-            const selectedPayment = document.querySelector('input[name="payment"]:checked').value;
-            
-            if (selectedPayment === 'prepaid') {
-                placeOrderBtn.style.display = 'none';
-                razorpayContainer.style.display = 'block';
-            } else if (selectedPayment === 'cod') {
-                placeOrderBtn.style.display = 'block';
-                razorpayContainer.style.display = 'none';
+    // Handle Razorpay payment button callback
+    window.addEventListener('message', function(event) {
+        if (event.data && event.data.type === 'razorpay_payment_success') {
+            // Call our global function to handle payment success
+            if (window.handleRazorpayPaymentSuccess) {
+                window.handleRazorpayPaymentSuccess(event.data.response);
             }
         }
-
-        // Add event listeners to payment radio buttons
-        paymentRadios.forEach(radio => {
-            radio.addEventListener('change', togglePaymentButtons);
-        });
-
-        // Initialize button visibility based on default selection (prepaid is checked by default)
-        togglePaymentButtons();
     });
+
+    // Alternative callback method for Razorpay payment button
+    window.razorpayPaymentSuccess = function(response) {
+        console.log('Razorpay payment button success callback:', response);
+        if (window.handleRazorpayPaymentSuccess) {
+            window.handleRazorpayPaymentSuccess(response);
+        }
+    };
     </script>
 </body>
 </html> 

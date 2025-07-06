@@ -983,4 +983,61 @@ h2 {
 h2 {
     font-size: 1.125rem;
     margin-bottom: 1rem;
+}
+
+/* Razorpay Payment Button Container */
+.razorpay-payment-container {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.razorpay-payment-container:hover {
+    border-color: #1a73e8;
+    background: #f0f8ff;
+}
+
+.payment-button-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50px;
+}
+
+.payment-button-wrapper form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Ensure Razorpay button styling is consistent */
+.razorpay-payment-container .razorpay-payment-button {
+    background: #1a73e8 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-family: 'Google Sans', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.razorpay-payment-container .razorpay-payment-button:hover {
+    background: #1557b0 !important;
+}
+
+/* Responsive design for payment button */
+@media (max-width: 600px) {
+    .razorpay-payment-container {
+        padding: 0.75rem;
+    }
+    
+    .payment-button-wrapper {
+        min-height: 40px;
+    }
 } 

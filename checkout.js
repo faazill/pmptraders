@@ -192,8 +192,142 @@ document.addEventListener('DOMContentLoaded', function() {
         input.addEventListener('change', function() {
             paymentInputs.forEach(i => i.parentElement.classList.remove('selected'));
             if (this.checked) this.parentElement.classList.add('selected');
+            
+            // Show/hide Razorpay payment button based on payment method
+            const razorpayContainer = document.getElementById('razorpay-payment-container');
+            const placeOrderBtn = document.getElementById('place-order-btn');
+            
+            if (this.value === 'prepaid') {
+                // Validate form before showing payment button
+                if (validateFormForPayment()) {
+                    if (razorpayContainer) razorpayContainer.style.display = 'block';
+                    if (placeOrderBtn) placeOrderBtn.style.display = 'none';
+                } else {
+                    // Show error message and keep place order button visible
+                    showErrorNotification('Please fill all required fields before proceeding with payment.');
+                    if (razorpayContainer) razorpayContainer.style.display = 'none';
+                    if (placeOrderBtn) placeOrderBtn.style.display = 'block';
+                }
+            } else {
+                if (razorpayContainer) razorpayContainer.style.display = 'none';
+                if (placeOrderBtn) placeOrderBtn.style.display = 'block';
+            }
         });
     });
+
+    // Function to validate form for payment
+    function validateFormForPayment() {
+        const requiredFields = [
+            'first-name',
+            'last-name',
+            'street-address',
+            'city',
+            'state',
+            'pincode',
+            'phone',
+            'email'
+        ];
+        
+        for (const fieldName of requiredFields) {
+            const field = document.getElementById(fieldName);
+            if (!field || !field.value.trim()) {
+                return false;
+            }
+        }
+        
+        // Validate email format
+        const emailField = document.getElementById('email');
+        if (emailField && emailField.value) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailField.value)) {
+                return false;
+            }
+        }
+        
+        // Validate phone number (basic validation)
+        const phoneField = document.getElementById('phone');
+        if (phoneField && phoneField.value) {
+            const phoneRegex = /^[0-9]{10}$/;
+            if (!phoneRegex.test(phoneField.value.replace(/\s/g, ''))) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    // Initialize payment method display on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectedPayment = document.querySelector('input[name="payment"]:checked');
+        const razorpayContainer = document.getElementById('razorpay-payment-container');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        
+        if (selectedPayment && selectedPayment.value === 'prepaid') {
+            if (razorpayContainer) razorpayContainer.style.display = 'block';
+            if (placeOrderBtn) placeOrderBtn.style.display = 'none';
+        } else {
+            if (razorpayContainer) razorpayContainer.style.display = 'none';
+            if (placeOrderBtn) placeOrderBtn.style.display = 'block';
+        }
+    });
+
+    // Add form field listeners to update Razorpay payment button
+    function setupFormFieldListeners() {
+        const firstNameInput = document.getElementById('first-name');
+        const lastNameInput = document.getElementById('last-name');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        
+        function updatePaymentButton() {
+            const firstName = firstNameInput ? firstNameInput.value.trim() : '';
+            const lastName = lastNameInput ? lastNameInput.value.trim() : '';
+            const email = emailInput ? emailInput.value.trim() : '';
+            const phone = phoneInput ? phoneInput.value.trim() : '';
+            
+            // Update Razorpay payment button with customer information
+            const paymentButton = document.querySelector('[data-payment_button_id="pl_QpnMEgCSwwTW0l"]');
+            if (paymentButton) {
+                const fullName = `${firstName} ${lastName}`.trim();
+                if (fullName) paymentButton.setAttribute('data-prefill[name]', fullName);
+                if (email) paymentButton.setAttribute('data-prefill[email]', email);
+                if (phone) paymentButton.setAttribute('data-prefill[contact]', phone);
+            }
+            
+            // Check if prepaid is selected and update payment button visibility
+            const selectedPayment = document.querySelector('input[name="payment"]:checked');
+            if (selectedPayment && selectedPayment.value === 'prepaid') {
+                const razorpayContainer = document.getElementById('razorpay-payment-container');
+                const placeOrderBtn = document.getElementById('place-order-btn');
+                
+                if (validateFormForPayment()) {
+                    if (razorpayContainer) razorpayContainer.style.display = 'block';
+                    if (placeOrderBtn) placeOrderBtn.style.display = 'none';
+                } else {
+                    if (razorpayContainer) razorpayContainer.style.display = 'none';
+                    if (placeOrderBtn) placeOrderBtn.style.display = 'block';
+                }
+            }
+        }
+        
+        // Add listeners to form fields
+        if (firstNameInput) firstNameInput.addEventListener('input', updatePaymentButton);
+        if (lastNameInput) lastNameInput.addEventListener('input', updatePaymentButton);
+        if (emailInput) emailInput.addEventListener('input', updatePaymentButton);
+        if (phoneInput) phoneInput.addEventListener('input', updatePaymentButton);
+        
+        // Add listeners to other required fields
+        const requiredFields = ['street-address', 'city', 'state', 'pincode'];
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (field) {
+                field.addEventListener('input', updatePaymentButton);
+                field.addEventListener('change', updatePaymentButton);
+            }
+        });
+    }
+
+    // Call setup function when DOM is loaded
+    document.addEventListener('DOMContentLoaded', setupFormFieldListeners);
 
     // Form validation and order confirmation
     if (checkoutForm) {
@@ -295,15 +429,11 @@ document.addEventListener('DOMContentLoaded', function() {
             order_id: '', // This will be generated by your backend
             handler: function(response) {
                 console.log('Payment successful:', response);
-                // Payment successful - redirect to order placed page
+                // Payment successful
                 orderData.paymentId = response.razorpay_payment_id;
                 orderData.paymentStatus = 'completed';
-                
-                // Store updated order data in localStorage
-                localStorage.setItem('latestPrepaidOrder', JSON.stringify(orderData));
-                
-                // Redirect to order placed page
-                window.location.href = 'order-placed.html';
+                saveOrderToFirebase(orderData);
+                showPaymentSuccess();
             },
             prefill: {
                 name: `${orderData.firstName} ${orderData.lastName}`,
@@ -338,6 +468,38 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error creating Razorpay instance:', error);
             showErrorNotification('Payment gateway error. Please try again.');
         }
+    }
+
+    function showPaymentSuccess() {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = 0;
+        overlay.style.left = 0;
+        overlay.style.width = '100vw';
+        overlay.style.height = '100vh';
+        overlay.style.background = 'rgba(32, 33, 36, 0.6)';
+        overlay.style.display = 'flex';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = 9999;
+        overlay.innerHTML = `
+            <div style="background:#fff;padding:2rem;border-radius:8px;border:1px solid #dadce0;text-align:center;max-width:400px;margin:1rem;">
+                <div style="font-size:2rem;color:#34a853;margin-bottom:1rem;"><i class='fas fa-check-circle'></i></div>
+                <h2 style="margin:0 0 0.5rem 0;font-size:1.125rem;font-weight:500;color:#202124;font-family:'Google Sans',sans-serif;">Payment Successful!</h2>
+                <p style="color:#5f6368;font-size:0.875rem;margin:0 0 1rem 0;font-family:'Google Sans',sans-serif;">Your order has been placed successfully. Thank you for shopping with us!</p>
+                <button class="btn btn-secondary" style="background: #6c757d; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; transition: background-color 0.2s;" onclick="window.location.href='productpages/product1.html'">Continue Shopping</button>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+
+        // Add hover effect to button
+        const continueBtn = overlay.querySelector('button');
+        continueBtn.onmouseenter = function() {
+            this.style.background = '#1557b0';
+        };
+        continueBtn.onmouseleave = function() {
+            this.style.background = '#1a73e8';
+        };
     }
 
     function showPaymentCancelled() {
@@ -391,7 +553,7 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show appropriate confirmation based on payment method
             if (orderData.paymentMethod === 'prepaid') {
-                // For prepaid orders, success message is already shown by initializeRazorpay()
+                // For prepaid orders, success message is already shown by showPaymentSuccess()
                 // Reset form
                 checkoutForm.reset();
                 updateSummary();
@@ -475,6 +637,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
 
+    function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.top = '20px';
+        notification.style.right = '20px';
+        notification.style.padding = '1rem 1.5rem';
+        notification.style.borderRadius = '8px';
+        notification.style.color = '#fff';
+        notification.style.fontWeight = '500';
+        notification.style.zIndex = '10000';
+        notification.style.fontFamily = "'Google Sans', sans-serif";
+        notification.style.maxWidth = '400px';
+        notification.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        
+        // Set background color based on type
+        switch (type) {
+            case 'success':
+                notification.style.background = '#34a853';
+                break;
+            case 'error':
+                notification.style.background = '#dc3545';
+                break;
+            case 'warning':
+                notification.style.background = '#fbbc04';
+                break;
+            default:
+                notification.style.background = '#1a73e8';
+        }
+        
+        notification.textContent = message;
+        document.body.appendChild(notification);
+        
+        // Remove notification after 5 seconds
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 5000);
+    }
+
     if (applyCouponBtn && couponInput) {
         applyCouponBtn.addEventListener('click', function() {
             const couponCode = couponInput.value.trim().toUpperCase();
@@ -538,4 +740,78 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Razorpay test failed: ' + error.message);
         }
     };
+
+    // Global function to handle Razorpay payment button success
+    window.handleRazorpayPaymentSuccess = function(response) {
+        console.log('Razorpay payment button success:', response);
+        
+        // Collect form data
+        const formData = new FormData(document.getElementById('checkout-form'));
+        const currentQuantity = document.getElementById('qty-input') ? parseInt(document.getElementById('qty-input').value) : validQuantity;
+        const subtotal = currentQuantity * productBasePrice;
+        const total = subtotal - discountAmount;
+        
+        const orderData = {
+            // Customer Information
+            firstName: formData.get('first-name'),
+            lastName: formData.get('last-name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            
+            // Address Information
+            country: formData.get('country'),
+            streetAddress: formData.get('street-address'),
+            city: formData.get('city'),
+            state: formData.get('state'),
+            pincode: formData.get('pincode'),
+            
+            // Business Information
+            gstin: formData.get('gstin'),
+            couponCode: formData.get('coupon-code'),
+            orderNotes: formData.get('order-notes'),
+            
+            // Order Details
+            productName: selectedProduct.name,
+            productId: urlProduct,
+            productImage: selectedProduct.image,
+            productPrice: selectedProduct.price,
+            quantity: currentQuantity,
+            subtotal: subtotal,
+            total: total,
+            discount: discountAmount,
+            paymentMethod: 'prepaid',
+            orderDate: new Date().toISOString(),
+            orderId: generateOrderId(),
+            
+            // Payment Details
+            paymentId: response.razorpay_payment_id,
+            paymentStatus: 'completed',
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature
+        };
+
+        // Save to Firebase under prepaid_orders
+        savePrepaidOrderToFirebase(orderData);
+    };
+
+    // Function to save prepaid orders to Firebase
+    function savePrepaidOrderToFirebase(orderData) {
+        try {
+            // Save to Firebase under prepaid_orders
+            const orderRef = database.ref('prepaid_orders').push(orderData);
+            
+            console.log('Prepaid order saved successfully with ID:', orderRef.key);
+            
+            // Show success message
+            showPaymentSuccess();
+            
+            // Reset form
+            document.getElementById('checkout-form').reset();
+            updateSummary();
+            
+        } catch (error) {
+            console.error('Error saving prepaid order:', error);
+            showErrorNotification('Failed to save order. Please contact support.');
+        }
+    }
 }); 
