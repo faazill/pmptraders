@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Return Policy - PMP Traders</title>
+    <link rel="icon" type="image/png" href="assets/logo.png?v=1">
+    <link rel="shortcut icon" type="image/png" href="assets/logo.png?v=1">
+    <link rel="apple-touch-icon" href="assets/logo.png?v=1">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .policy-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .policy-header h1 {
+            color: #202124;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Google Sans', sans-serif;
+        }
+        
+        .policy-header p {
+            color: #5f6368;
+            font-size: 1.1rem;
+        }
+        
+        .policy-section {
+            background: #fff;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .policy-section h2 {
+            color: #202124;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-family: 'Google Sans', sans-serif;
+            border-bottom: 2px solid #1a73e8;
+            padding-bottom: 0.5rem;
+        }
+        
+        .policy-section h3 {
+            color: #202124;
+            font-size: 1.25rem;
+            margin: 1.5rem 0 1rem 0;
+            font-family: 'Google Sans', sans-serif;
+        }
+        
+        .policy-section p {
+            color: #5f6368;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+        
+        .policy-section ul {
+            color: #5f6368;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        .policy-section li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .highlight-box {
+            background: #f8f9fa;
+            border-left: 4px solid #1a73e8;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+        
+        .contact-info {
+            background: #e8f0fe;
+            border: 1px solid #1a73e8;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .contact-info h3 {
+            color: #1a73e8;
+            margin-bottom: 1rem;
+        }
+        
+        .back-home-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            font-family: 'Google Sans', sans-serif;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+            margin-bottom: 2rem;
+        }
+        
+        .back-home-btn:hover {
+            color: #1557b0;
+        }
+        
+        .return-steps {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .return-steps ol {
+            counter-reset: step-counter;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .return-steps li {
+            counter-increment: step-counter;
+            margin-bottom: 1rem;
+            padding-left: 3rem;
+            position: relative;
+        }
+        
+        .return-steps li::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            background: #1a73e8;
+            color: white;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .policy-container {
+                margin: 1rem auto;
+            }
+            
+            .policy-header h1 {
+                font-size: 2rem;
+            }
+            
+            .policy-section {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <img src="assets/logo.png" alt="PMP Traders" style="height: 40px; width: auto;">
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#products" class="nav-link">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="your-orders.html" class="nav-link">Track Order</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="policy-container">
+        <div class="back-home-section">
+            <a href="index.html" class="back-home-btn">
+                <i class="fas fa-arrow-left"></i>
+                Back to Home
+            </a>
+        </div>
+
+        <div class="policy-header">
+            <h1>Return Policy</h1>
+            <p>Last updated: December 2024</p>
+        </div>
+
+        <div class="policy-section">
+            <h2>1. Return Policy Overview</h2>
+            <p>At PMP Traders, we stand behind the quality of our products. We accept returns within 7 days of delivery for manufacturing defects only. Our return policy is designed to ensure customer satisfaction while maintaining fair business practices.</p>
+            
+            <div class="highlight-box">
+                <strong>Important:</strong> Refund or replacement only for manufacturing defect. This policy applies to defects that are present at the time of manufacturing and are not caused by improper use, installation, or maintenance by the customer.
+            </div>
+        </div>
+
+        <div class="policy-section">
+            <h2>2. What Can Be Returned</h2>
+            
+            <h3>2.1 Eligible for Return</h3>
+            <ul>
+                <li>Products with manufacturing defects</li>
+                <li>Products that arrive damaged during shipping</li>
+                <li>Products that don't match the description</li>
+                <li>Products with missing parts or components</li>
+            </ul>
+            
+            <h3>2.2 Return Conditions</h3>
+            <p>To be eligible for return, products must meet the following criteria:</p>
+            <ul>
+                <li>Return request made within 7 days of delivery</li>
+                <li>Product in original packaging</li>
+                <li>Product unused and in original condition</li>
+                <li>All original accessories and components included</li>
+                <li>Clear evidence of manufacturing defect</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>3. What Cannot Be Returned</h2>
+            
+            <div class="warning-box">
+                <strong>Non-Returnable Items:</strong>
+            </div>
+            
+            <ul>
+                <li><strong>Used Products:</strong> Products showing signs of use, installation, or wear</li>
+                <li><strong>Damaged Products:</strong> Products damaged due to customer handling or installation</li>
+                <li><strong>Missing Packaging:</strong> Products without original packaging or accessories</li>
+                <li><strong>Consumable Items:</strong> Filters, membranes, cartridges, and other consumable parts</li>
+                <li><strong>Installation Services:</strong> Installation charges are non-refundable once service is provided</li>
+                <li><strong>Custom Orders:</strong> Products ordered with specific customizations</li>
+                <li><strong>Time Expired:</strong> Products purchased more than 7 days ago</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>4. Return Process</h2>
+            
+            <div class="return-steps">
+                <h3>How to Return a Product:</h3>
+                <ol>
+                    <li><strong>Contact Us:</strong> Call our customer support at +91 9946170056 or +91 9656622617 within 7 days of delivery</li>
+                    <li><strong>Describe the Issue:</strong> Explain the manufacturing defect or problem you're experiencing</li>
+                    <li><strong>Get Approval:</strong> Our team will review your request and provide return authorization if eligible</li>
+                    <li><strong>Package Product:</strong> Securely package the product in its original packaging with all accessories</li>
+                    <li><strong>Ship Back:</strong> We will arrange pickup or provide shipping instructions</li>
+                    <li><strong>Inspection:</strong> Our team will inspect the returned product</li>
+                    <li><strong>Refund/Replacement:</strong> Upon approval, we'll process your refund or send a replacement</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="policy-section">
+            <h2>5. Refund Process</h2>
+            
+            <h3>5.1 Refund Timeline</h3>
+            <ul>
+                <li><strong>Processing Time:</strong> 2-3 business days after receiving the returned product</li>
+                <li><strong>Bank Processing:</strong> 3-5 business days for the refund to appear in your account</li>
+                <li><strong>Total Time:</strong> 5-8 business days from receiving the return</li>
+            </ul>
+            
+            <h3>5.2 Refund Method</h3>
+            <p>Refunds will be processed to the original payment method used for the purchase:</p>
+            <ul>
+                <li>Credit/Debit cards: Refunded to the same card</li>
+                <li>UPI: Refunded to the same UPI ID</li>
+                <li>Net Banking: Refunded to the same bank account</li>
+                <li>Cash on Delivery: Bank transfer to your account</li>
+            </ul>
+            
+            <h3>5.3 Refund Amount</h3>
+            <ul>
+                <li>Full product price for manufacturing defects</li>
+                <li>Shipping charges refunded if return is due to our error</li>
+                <li>Installation charges are non-refundable</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>6. Replacement Policy</h2>
+            
+            <h3>6.1 When Replacement is Offered</h3>
+            <ul>
+                <li>Manufacturing defects confirmed by our team</li>
+                <li>Product under warranty period</li>
+                <li>Same product is available in stock</li>
+            </ul>
+            
+            <h3>6.2 Replacement Process</h3>
+            <ul>
+                <li>We will ship the replacement product within 3-5 business days</li>
+                <li>Free shipping for replacement products</li>
+                <li>Original product must be returned before replacement is shipped</li>
+                <li>Replacement warranty starts from the date of replacement delivery</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>7. Warranty Information</h2>
+            
+            <h3>7.1 Warranty Coverage</h3>
+            <p>All products come with manufacturer warranty as specified in product descriptions:</p>
+            <ul>
+                <li><strong>Pump and SMPS:</strong> 1 year warranty</li>
+                <li><strong>Installation:</strong> Provided by seller (charges apply: ₹500-700)</li>
+                <li><strong>Consumable Parts:</strong> Not covered under warranty</li>
+            </ul>
+            
+            <h3>7.2 What's Covered</h3>
+            <ul>
+                <li>Manufacturing defects in motor (pump)</li>
+                <li>Manufacturing defects in SMPS</li>
+                <li>Defects in electrical components</li>
+            </ul>
+            
+            <h3>7.3 What's Not Covered</h3>
+            <ul>
+                <li>Plastic and glass body damage</li>
+                <li>Consumable items (sediment, carbon, membranes, etc.)</li>
+                <li>Improper installation by customer</li>
+                <li>Damage due to misuse or accidents</li>
+                <li>Normal wear and tear</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>8. Shipping and Handling</h2>
+            
+            <h3>8.1 Return Shipping</h3>
+            <ul>
+                <li>Free return shipping for manufacturing defects</li>
+                <li>Customer pays shipping for non-defect returns</li>
+                <li>We arrange pickup for eligible returns</li>
+            </ul>
+            
+            <h3>8.2 Packaging Requirements</h3>
+            <ul>
+                <li>Product must be in original packaging</li>
+                <li>All accessories and manuals included</li>
+                <li>Proper protection to prevent damage during transit</li>
+                <li>Return authorization number clearly marked on package</li>
+            </ul>
+        </div>
+
+        <div class="policy-section">
+            <h2>9. Contact Information</h2>
+            <p>For return requests, warranty claims, or any questions about our return policy:</p>
+            <ul>
+                <li><strong>Customer Support:</strong> +91 9946170056, +91 9656622617</li>
+                <li><strong>Email:</strong> support@pmptraders.com</li>
+                <li><strong>Business Hours:</strong> Monday to Saturday, 9:00 AM to 6:00 PM IST</li>
+                <li><strong>Address:</strong> PUKAYOOR, AR NAGAR, OLAKARA, Malappuram, Kerala, 676306</li>
+            </ul>
+        </div>
+
+        <div class="success-box">
+            <h3>Customer Satisfaction Guarantee</h3>
+            <p>We are committed to providing the best customer experience. If you have any concerns about your purchase, please don't hesitate to contact us. Our team is here to help ensure your complete satisfaction.</p>
+        </div>
+
+        <div class="contact-info">
+            <h3>Need Help with Returns?</h3>
+            <p>Our customer support team is available to assist you with any questions about returns, refunds, or warranty claims. Contact us today for personalized assistance.</p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>PMP Traders</h3>
+                    <p>Professional product solutions for your business needs.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#products">Products</a></li>
+                        <li><a href="index.html#about">About</a></li>
+                        <li><a href="index.html#contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 PMP Traders. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <!-- Cookie Consent Popup -->
+    <div id="cookieConsent" class="cookie-consent" style="display: none;">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h4><i class="fas fa-cookie-bite"></i> Cookie Policy</h4>
+                <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. By clicking "Accept", you consent to our use of cookies. <a href="privacy-policy.html" target="_blank">Learn more</a></p>
+            </div>
+            <div class="cookie-actions">
+                <button id="acceptCookies" class="btn btn-primary">Accept</button>
+                <button id="declineCookies" class="btn btn-secondary">Decline</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

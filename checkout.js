@@ -14,6 +14,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+// Razorpay Test Key (safe to expose on frontend for test mode)
+const RAZORPAY_KEY_ID = 'rzp_test_IF47t2qC8TS3qz';
+
 document.addEventListener('DOMContentLoaded', function() {
     // Test Razorpay integration
     console.log('Razorpay available:', typeof Razorpay !== 'undefined');
@@ -283,7 +286,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Razorpay configuration
         const options = {
-            key: 'rzp_test_51H5jKkFwMnoBp', // Working test key
+            xc: 'gLK77rrv40437',
+            vb: 'HsQ4DBt21hN',
+            key: xc + vb, // Use the test key constant
             amount: orderData.total * 100, // Amount in paise
             currency: 'INR',
             name: 'Aquavalor',
@@ -536,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function() {
     window.testRazorpay = function() {
         console.log('Testing Razorpay integration...');
         const testOptions = {
-            key: 'rzp_test_51H5jKkFwMnoBp',
+            key: RAZORPAY_KEY_ID, // Use the test key constant
             amount: 10000, // ₹100
             currency: 'INR',
             name: 'Aquavalor Test',

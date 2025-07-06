@@ -1227,14 +1227,77 @@ document.addEventListener('keydown', function(event) {
 
 // Tab switching for product details (Description, Warranty & Support)
 function openTab(tabName) {
-    // Remove active class from all tab buttons and contents
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-
-    // Add active class to the clicked tab button and its content
-    // Find the button that matches the tabName
-    const tabButton = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`openTab('${tabName}')`));
-    if (tabButton) tabButton.classList.add('active');
-    const tabContent = document.getElementById(tabName);
-    if (tabContent) tabContent.classList.add('active');
+    // Hide all tab contents
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Remove active class from all tab buttons
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    tabButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Show the selected tab content
+    document.getElementById(tabName).classList.add('active');
+    
+    // Add active class to the clicked button
+    event.target.classList.add('active');
 }
+
+// Cookie Consent Functionality
+function initCookieConsent() {
+    const cookieConsent = document.getElementById('cookieConsent');
+    const acceptBtn = document.getElementById('acceptCookies');
+    const declineBtn = document.getElementById('declineCookies');
+    
+    // Check if user has already made a choice
+    const cookieChoice = localStorage.getItem('cookieConsent');
+    
+    if (!cookieChoice && cookieConsent) {
+        // Show cookie consent popup after a short delay
+        setTimeout(() => {
+            cookieConsent.style.display = 'block';
+            setTimeout(() => {
+                cookieConsent.classList.add('show');
+            }, 100);
+        }, 1000);
+    }
+    
+    // Handle accept button click
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'accepted');
+            hideCookieConsent();
+        });
+    }
+    
+    // Handle decline button click
+    if (declineBtn) {
+        declineBtn.addEventListener('click', () => {
+            localStorage.setItem('cookieConsent', 'declined');
+            hideCookieConsent();
+            showNotification('Cookie preferences saved. Some features may be limited.', 'info');
+        });
+    }
+}
+
+function hideCookieConsent() {
+    const cookieConsent = document.getElementById('cookieConsent');
+    if (cookieConsent) {
+        cookieConsent.classList.remove('show');
+        setTimeout(() => {
+            cookieConsent.style.display = 'none';
+        }, 300);
+    }
+}
+
+function hasCookieConsent() {
+    return localStorage.getItem('cookieConsent') === 'accepted';
+}
+
+// Initialize cookie consent when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    initCookieConsent();
+});
