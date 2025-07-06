@@ -2531,6 +2531,10 @@ html, body {
         padding: 6px 12px;
     }
 
+    .nav-logo {
+        margin-left: 16px;
+    }
+
     .nav-logo a {
         text-decoration: none !important;
         color: inherit;
