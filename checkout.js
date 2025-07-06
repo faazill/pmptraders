@@ -14,6 +14,54 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 
+// Google Analytics Tracking Functions
+function trackEvent(eventName, parameters = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, parameters);
+    }
+}
+
+function trackPurchase(orderId, productName, productPrice, quantity = 1, paymentMethod = 'cod') {
+    trackEvent('purchase', {
+        transaction_id: orderId,
+        value: productPrice * quantity,
+        currency: 'INR',
+        payment_method: paymentMethod,
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            quantity: quantity
+        }]
+    });
+}
+
+function trackBeginCheckout(productName, productPrice, quantity = 1) {
+    trackEvent('begin_checkout', {
+        currency: 'INR',
+        value: productPrice * quantity,
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            quantity: quantity
+        }]
+    });
+}
+
+function trackAddToCart(productName, productPrice, quantity = 1) {
+    trackEvent('add_to_cart', {
+        currency: 'INR',
+        value: productPrice * quantity,
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            quantity: quantity
+        }]
+    });
+}
+
 // Razorpay Test Key (safe to expose on frontend for test mode)
 const RAZORPAY_KEY_ID = 'rzp_test_IF47t2qC8TS3qz';
 
@@ -261,6 +309,9 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Payment method selected:', paymentMethod);
             console.log('Order data prepared:', orderData);
             
+            // Track begin checkout with Google Analytics
+            trackBeginCheckout(orderData.productName, orderData.productPrice, orderData.quantity);
+            
             if (paymentMethod === 'prepaid') {
                 console.log('Initializing Razorpay for prepaid payment...');
                 // Initialize Razorpay for prepaid payment
@@ -416,6 +467,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const orderRef = database.ref(`${folderName}`).push(orderData);
             
             console.log('Order saved successfully with ID:', orderRef.key);
+            
+            // Track purchase with Google Analytics
+            trackPurchase(orderData.orderId, orderData.productName, orderData.productPrice, orderData.quantity, orderData.paymentMethod);
             
             // Show appropriate confirmation based on payment method
             if (orderData.paymentMethod === 'prepaid') {

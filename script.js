@@ -13,6 +13,77 @@ function changeImage(imageSrc, clickedElement) {
     }
 }
 
+// Google Analytics Tracking Functions
+function trackEvent(eventName, parameters = {}) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, parameters);
+    }
+}
+
+function trackPageView(pageTitle, pageLocation) {
+    if (typeof gtag !== 'undefined') {
+        gtag('event', 'page_view', {
+            page_title: pageTitle,
+            page_location: pageLocation
+        });
+    }
+}
+
+function trackFormSubmission(formName, formData = {}) {
+    trackEvent('form_submit', {
+        form_name: formName,
+        ...formData
+    });
+}
+
+function trackButtonClick(buttonName, buttonLocation) {
+    trackEvent('button_click', {
+        button_name: buttonName,
+        button_location: buttonLocation
+    });
+}
+
+function trackProductView(productName, productPrice, productCategory = 'water_purifier') {
+    trackEvent('view_item', {
+        currency: 'INR',
+        value: productPrice,
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            item_category: productCategory,
+            quantity: 1
+        }]
+    });
+}
+
+function trackAddToCart(productName, productPrice, quantity = 1) {
+    trackEvent('add_to_cart', {
+        currency: 'INR',
+        value: productPrice * quantity,
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            quantity: quantity
+        }]
+    });
+}
+
+function trackPurchase(orderId, productName, productPrice, quantity = 1) {
+    trackEvent('purchase', {
+        transaction_id: orderId,
+        value: productPrice * quantity,
+        currency: 'INR',
+        items: [{
+            item_id: productName.toLowerCase().replace(/\s+/g, '_'),
+            item_name: productName,
+            price: productPrice,
+            quantity: quantity
+        }]
+    });
+}
+
 // Quantity Selector Functionality
 function changeQuantity(delta) {
     const quantityInput = document.getElementById('quantity');
@@ -24,6 +95,13 @@ function changeQuantity(delta) {
     
     quantityInput.value = newQty;
     updateOrderSummary();
+    
+    // Track quantity change
+    trackEvent('quantity_change', {
+        product_name: 'AQUA Water Purifier',
+        old_quantity: currentQty,
+        new_quantity: newQty
+    });
 }
 
 // Increase quantity function
@@ -87,6 +165,9 @@ function buyNow() {
 
 // Get Quote Functionality
 function getQuote() {
+    // Track quote request with Google Analytics
+    trackButtonClick('get_quote', 'product_page');
+    
     // Open the wholesaler quote modal
     document.getElementById('quoteModal').style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -140,6 +221,14 @@ async function submitWholesalerQuote(event) {
     };
     
     console.log('Wholesaler quote data to submit:', quoteData);
+    
+    // Track form submission with Google Analytics
+    trackFormSubmission('wholesaler_quote_form', {
+        business_name: quoteData.businessName,
+        user_email: quoteData.email,
+        product_name: quoteData.productName,
+        requirement: quoteData.requirement
+    });
     
     // Get the submit button
     const submitBtn = form.querySelector('.btn-submit');
@@ -374,6 +463,12 @@ async function submitForm(event) {
     };
     
     console.log('Contact data to submit:', contactData);
+    
+    // Track form submission with Google Analytics
+    trackFormSubmission('contact_form', {
+        form_subject: contactData.subject,
+        user_email: contactData.email
+    });
     
     // Get the submit button
     const submitBtn = form.querySelector('.btn-submit');
